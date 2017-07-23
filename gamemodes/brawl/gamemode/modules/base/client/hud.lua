@@ -789,13 +789,20 @@ net.Receive( "brawl.killfeed", function( len )
 		wep = IsValid( awep ) and (awep.PrintName or awep:GetClass()) or "something"
 	end
 
-	brawl.hud.addNotification({
-		killerCol, killer,
-		color_white, " killed ",
-		victimCol, data.victim == LocalPlayer() and "you" or data.victim:Name(),
-		color_white, " with ",
-		wep
-	}, "data.type" )
+	if data.attacker ~= data.victim then
+		brawl.hud.addNotification({
+			killerCol, killer,
+			color_white, " killed ",
+			victimCol, data.victim == LocalPlayer() and "you" or data.victim:Name(),
+			color_white, " with ",
+			wep
+		})
+	else
+		brawl.hud.addNotification({
+			killerCol, killer,
+			color_white, " committed suicide"
+		})
+	end
 
 end)
 

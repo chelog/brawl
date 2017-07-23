@@ -18,7 +18,16 @@ function brawl.NotifyAll( data, t )
 		brawl.Notify( ply, data, t )
 	end
 
-	brawl.msg( "[NotifyAll] %s", data )
+	local msg = ""
+	if istable(data) then
+		for k,v in pairs(data) do
+			if isstring(v) and v:sub( 1, 5 ) ~= "font_" then msg = msg .. v end
+		end
+	elseif isstring(data) then
+		msg = data
+	end
+
+	if msg then brawl.msg( "[NotifyAll] %s", msg ) end
 
 end
 
