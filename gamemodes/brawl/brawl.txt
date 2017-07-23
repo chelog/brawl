@@ -1,0 +1,9 @@
+"brawl"
+{
+	"base"		"base"
+	"title"		"Brawl"
+	"maps"		""
+	"menusystem"	"1"
+	"workshopid" ""
+	"version"	"0.1"
+}
