@@ -318,9 +318,9 @@ end
 function util.GetAlivePlayers()
    local alive = {}
    for k, p in pairs(player.GetAll()) do
-      if IsValid(p) and p:Alive() then
-         table.insert(alive, p)
-      end
+	  if IsValid(p) and p:Alive() then
+		 table.insert(alive, p)
+	  end
    end
 
    return alive
@@ -335,17 +335,17 @@ function util.GetNextAlivePlayer(ply)
    local choice = nil
 
    if IsValid(ply) then
-      for k,p in pairs(alive) do
-         if prev == ply then
-            choice = p
-         end
+	  for k,p in pairs(alive) do
+		 if prev == ply then
+			choice = p
+		 end
 
-         prev = p
-      end
+		 prev = p
+	  end
    end
 
    if not IsValid(choice) then
-      choice = alive[1]
+	  choice = alive[1]
    end
 
    return choice
@@ -397,13 +397,13 @@ end
 
 function team.GetAlivePlayers( k )
 	local alive = {}
-    for k, p in pairs( team.GetPlayers(k) ) do
-       if IsValid(p) and p:Alive() then
-          table.insert(alive, p)
-       end
-    end
+	for k, p in pairs( team.GetPlayers(k) ) do
+	   if IsValid(p) and p:Alive() then
+		  table.insert(alive, p)
+	   end
+	end
 
-    return alive
+	return alive
 end
 
 function table.GetWinningByMember( t, key, check )

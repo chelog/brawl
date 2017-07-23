@@ -5,7 +5,7 @@ function PANEL:Init()
 
 	self:SetMouseInputEnabled( true )
 	self:SetContentAlignment( 4 )
-    self:SetTextInset( 15, 0 )
+	self:SetTextInset( 15, 0 )
 
 end
 
@@ -14,7 +14,7 @@ function PANEL:ApplySchemeSettings()
 	local w, h = self:GetContentSize()
 	h = 40
 
-    self:SetSize( self:GetWide(), h )
+	self:SetSize( self:GetWide(), h )
 
 	DLabel.ApplySchemeSettings( self )
 
@@ -34,7 +34,7 @@ function PANEL:Init()
 
 	self.tabScroller = vgui.Create( "SideMenuScroller", self )
 	self.tabScroller:SetOverlap( 0 )
-    self.tabScroller:SetSize( 150, 0 )
+	self.tabScroller:SetSize( 150, 0 )
 	self.tabScroller:Dock( LEFT )
 
 	self:SetFadeTime( 0.2 )

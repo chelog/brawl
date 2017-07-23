@@ -54,7 +54,7 @@ function afkkick.init()
 		afkkick.idleTime = afkkick.idleTime + 1
 	end)
 
-    hook.Add( "HUDPaint", "afkkick_hud", afkkick.draw )
+	hook.Add( "HUDPaint", "afkkick_hud", afkkick.draw )
 	hook.Add( "Think", "afkkick_think", afkkick.think )
 	hook.Add( "PlayerButtonDown", "afkkick_notidle", afkkick.iamnotidle )
 end
@@ -67,19 +67,19 @@ end
 
 local timeLeft, nextThink = 0, 0
 function afkkick.think()
-    if CurTime() < nextThink then return end
+	if CurTime() < nextThink then return end
 
-    timeLeft = math.Clamp( 300 - afkkick.idleTime, 0, math.huge )
-    if LocalPlayer():GetNWBool( "SpectateOnly" ) then return end
+	timeLeft = math.Clamp( 300 - afkkick.idleTime, 0, math.huge )
+	if LocalPlayer():GetNWBool( "SpectateOnly" ) then return end
 
-    if timeLeft <= 0 then
-        nextThink = CurTime() + 5
+	if timeLeft <= 0 then
+		nextThink = CurTime() + 5
 		RunConsoleCommand( "brawl_spectate" )
 	end
 end
 
 function afkkick.draw()
-    if LocalPlayer():GetNWBool( "SpectateOnly" ) then return end
+	if LocalPlayer():GetNWBool( "SpectateOnly" ) then return end
 
 	if timeLeft <= 120 then
 		-- background

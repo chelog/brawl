@@ -30,25 +30,25 @@ function brawl.initDB()
 
 	-- brawl.config.db = {
 	--
-	--     EnableMySQL = true,
-	--     Host = "127.0.0.1",
-	--     Username = "gmod",
-	--     Password = "ohThatGMod",
-	--     Database_name = "brawl",
-	--     Database_port = 3306,
-	--     Preferred_module = "tmysql4",
+	--	 EnableMySQL = true,
+	--	 Host = "127.0.0.1",
+	--	 Username = "gmod",
+	--	 Password = "ohThatGMod",
+	--	 Database_name = "brawl",
+	--	 Database_port = 3306,
+	--	 Preferred_module = "tmysql4",
 	--
 	-- }
 
 	brawl.config.db = {
 
-	    EnableMySQL = false,
-	    Host = "",
-	    Username = "",
-	    Password = "",
-	    Database_name = "",
-	    Database_port = 3306,
-	    Preferred_module = "mysqloo",
+		EnableMySQL = false,
+		Host = "",
+		Username = "",
+		Password = "",
+		Database_name = "",
+		Database_port = 3306,
+		Preferred_module = "mysqloo",
 
 	}
 

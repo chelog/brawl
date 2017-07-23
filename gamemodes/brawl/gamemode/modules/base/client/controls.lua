@@ -22,22 +22,22 @@
 local escPressed = false
 hook.Add( "Think", "brawl.controls", function()
 
-    if input.IsKeyDown( KEY_ESCAPE ) then
-        if LocalPlayer():IsTyping() then escPressed = true end
-        -- if not gui.IsConsoleVisible() then escPressed = true end
-        if not escPressed then
-            gui.HideGameUI()
-            RunConsoleCommand( "brawl_menu" )
-            escPressed = true
-        end
-    else
-        escPressed = false
-    end
+	if input.IsKeyDown( KEY_ESCAPE ) then
+		if LocalPlayer():IsTyping() then escPressed = true end
+		-- if not gui.IsConsoleVisible() then escPressed = true end
+		if not escPressed then
+			gui.HideGameUI()
+			RunConsoleCommand( "brawl_menu" )
+			escPressed = true
+		end
+	else
+		escPressed = false
+	end
 
 end)
 
 hook.Add( "PlayerBindPress", "brawl.controls", function( ply, bind, press )
 
-    -- whatever
+	-- whatever
 
 end)

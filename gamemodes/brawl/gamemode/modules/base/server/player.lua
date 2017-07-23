@@ -4,19 +4,19 @@ function meta:LoadWeapons()
 
 	self:StripWeapons()
 
-    local melee = table.Random( brawl.config.weapons.melee )
-    local secondary = table.Random( brawl.config.weapons.secondary )
-    local extra = table.Random( brawl.config.weapons.extra )
+	local melee = table.Random( brawl.config.weapons.melee )
+	local secondary = table.Random( brawl.config.weapons.secondary )
+	local extra = table.Random( brawl.config.weapons.extra )
 
-    local mWep = self:Give( melee )
+	local mWep = self:Give( melee )
 	mWep:SetNWString( "WeaponCategory", "melee" )
-    local sWep = self:Give( secondary )
+	local sWep = self:Give( secondary )
 	sWep:SetNWString( "WeaponCategory", "secondary" )
-    self:AddAmmoClips( secondary, 2 )
-    if math.random( 4 ) == 1 then
-        local eWep = self:Give( extra )
+	self:AddAmmoClips( secondary, 2 )
+	if math.random( 4 ) == 1 then
+		local eWep = self:Give( extra )
 		eWep:SetNWString( "WeaponCategory", "extra" )
-    end
+	end
 
 	local cat = GetGlobalString("brawl.mode.category")
 	if cat ~= "none" then
@@ -24,27 +24,27 @@ function meta:LoadWeapons()
 		local pWep = self:Give( primary )
 		pWep:SetNWString( "WeaponCategory", "primary" )
 		self:AddAmmoClips( primary, 2 )
-	    timer.Simple( 0, function()
-	        self:SelectWeapon( primary )
-	    end)
+		timer.Simple( 0, function()
+			self:SelectWeapon( primary )
+		end)
 	else
 		timer.Simple( 0, function()
-	        self:SelectWeapon( secondary )
-	    end)
+			self:SelectWeapon( secondary )
+		end)
 	end
 
 end
 
 function meta:AddAmmoClips( wep, num, secondary )
 
-    brawl.AddWeaponClips( self, wep, num, secondary )
+	brawl.AddWeaponClips( self, wep, num, secondary )
 
 end
 
 function meta:LoadModel()
 
 	local level =  math.Clamp( math.floor( self:GetLevel() / 3 ) * 3, 1, 33 )
-    local mdls = table.Random( brawl.config.playerModels[ level ] )
+	local mdls = table.Random( brawl.config.playerModels[ level ] )
 
 	local mdl
 	if istable( mdls ) then
@@ -55,7 +55,7 @@ function meta:LoadModel()
 		self.models = { mdl }
 	end
 
-    self:SetModel( mdl )
+	self:SetModel( mdl )
 	net.Start( "brawl.myModel" )
 		net.WriteString( mdl )
 		net.WriteUInt( 1, 8 )
@@ -68,14 +68,14 @@ end
 
 function meta:LoadSkills()
 
-    self:SetWalkSpeed( brawl.config.player.baseWalkSpeed )
-    self:SetRunSpeed( brawl.config.player.baseRunSpeed )
-    self:SetCanZoom( false )
+	self:SetWalkSpeed( brawl.config.player.baseWalkSpeed )
+	self:SetRunSpeed( brawl.config.player.baseRunSpeed )
+	self:SetCanZoom( false )
 
-    self:SetStamina( 100 )
-    self.staminaLastUse = CurTime()
-    self.canSprint = true
-    self.canJump = true
+	self:SetStamina( 100 )
+	self.staminaLastUse = CurTime()
+	self.canSprint = true
+	self.canJump = true
 	self.attacks = {}
 	self.killStreak = 0
 	self.killsThisLife = 0
@@ -88,77 +88,77 @@ function meta:LoadSkills()
 		timer.Stop( "killStreakReset" .. uid )
 	end)
 
-    self.healthRegenTemp = 0
-    self:SetNWFloat( "LastHit", CurTime() )
+	self.healthRegenTemp = 0
+	self:SetNWFloat( "LastHit", CurTime() )
 
 end
 
 function meta:SetStamina( val )
 
-    self:SetNWFloat( "Stamina", val )
+	self:SetNWFloat( "Stamina", val )
 
 end
 
 function meta:TakeStamina( val )
 
-    self:SetNWFloat( "Stamina", math.Clamp( self:GetStamina() - val, 0, 100 ) )
-    self.staminaLastUse = CurTime()
+	self:SetNWFloat( "Stamina", math.Clamp( self:GetStamina() - val, 0, 100 ) )
+	self.staminaLastUse = CurTime()
 
 end
 
 hook.Add( "Think", "brawl.regen", function()
 
-    for k, ply in pairs( player.GetAll() ) do
-        if not IsValid( ply ) or not ply:Alive() then continue end
+	for k, ply in pairs( player.GetAll() ) do
+		if not IsValid( ply ) or not ply:Alive() then continue end
 
-        -- handle stamina
-        local vel = ply:GetVelocity():Length()
-        local stam = ply:GetStamina()
+		-- handle stamina
+		local vel = ply:GetVelocity():Length()
+		local stam = ply:GetStamina()
 
-        if ply:KeyDown( IN_SPEED ) and vel ~= 0 and ply:OnGround() and ply.canSprint then
-            local take = math.Clamp( FrameTime() * brawl.config.player.staminaSprintCost, 0, 100 )
-            if take ~= 0 then ply:TakeStamina( take ) end
-        elseif ply.staminaLastUse and ply.staminaLastUse + brawl.config.player.staminaRegenDelay <= CurTime() then
-            local mul = (not ply:OnGround() and 0) or (vel > 100 and 100 / vel or 1)
-            local newStam = math.Clamp( stam + FrameTime() * brawl.config.player.staminaRegenRate * mul, 0, 100 )
-            if newStam ~= stam then ply:SetStamina( newStam ) end
-        end
+		if ply:KeyDown( IN_SPEED ) and vel ~= 0 and ply:OnGround() and ply.canSprint then
+			local take = math.Clamp( FrameTime() * brawl.config.player.staminaSprintCost, 0, 100 )
+			if take ~= 0 then ply:TakeStamina( take ) end
+		elseif ply.staminaLastUse and ply.staminaLastUse + brawl.config.player.staminaRegenDelay <= CurTime() then
+			local mul = (not ply:OnGround() and 0) or (vel > 100 and 100 / vel or 1)
+			local newStam = math.Clamp( stam + FrameTime() * brawl.config.player.staminaRegenRate * mul, 0, 100 )
+			if newStam ~= stam then ply:SetStamina( newStam ) end
+		end
 
-        stam = ply:GetStamina()
+		stam = ply:GetStamina()
 
-        if stam < brawl.config.player.staminaJumpCost then
-            ply.canJump = false
-            ply:SetJumpPower( 0 )
-        elseif not ply.canJump or ply:GetJumpPower() == 0 then
-            ply.canJump = true
-            ply:SetJumpPower( 160 )
-        end
+		if stam < brawl.config.player.staminaJumpCost then
+			ply.canJump = false
+			ply:SetJumpPower( 0 )
+		elseif not ply.canJump or ply:GetJumpPower() == 0 then
+			ply.canJump = true
+			ply:SetJumpPower( 160 )
+		end
 
-        if stam <= 0 then
-            ply.canSprint = false
-            ply:SetRunSpeed( brawl.config.player.baseWalkSpeed )
-        elseif stam > 10 and (not ply.canSprint or ply:GetRunSpeed() == brawl.config.player.baseWalkSpeed) then
-            ply.canSprint = true
-            ply:SetRunSpeed( brawl.config.player.baseRunSpeed )
-        end
+		if stam <= 0 then
+			ply.canSprint = false
+			ply:SetRunSpeed( brawl.config.player.baseWalkSpeed )
+		elseif stam > 10 and (not ply.canSprint or ply:GetRunSpeed() == brawl.config.player.baseWalkSpeed) then
+			ply.canSprint = true
+			ply:SetRunSpeed( brawl.config.player.baseRunSpeed )
+		end
 
-        -- handle health
-        ply.healthRegenTemp = ply.healthRegenTemp or 0
-        if ply:GetNWFloat( "LastHit" ) + brawl.config.player.healthRegenDelay <= CurTime() then
-            ply.healthRegenTemp = ply.healthRegenTemp + FrameTime() * brawl.config.player.healthRegenRate
-            local delta = math.floor( ply.healthRegenTemp )
-            local hl = math.max( math.Clamp( ply:Health() + delta, 0, 50 ), ply:Health() )
-            ply.healthRegenTemp = ply.healthRegenTemp - delta
-            ply:SetHealth( hl )
-        end
-    end
+		-- handle health
+		ply.healthRegenTemp = ply.healthRegenTemp or 0
+		if ply:GetNWFloat( "LastHit" ) + brawl.config.player.healthRegenDelay <= CurTime() then
+			ply.healthRegenTemp = ply.healthRegenTemp + FrameTime() * brawl.config.player.healthRegenRate
+			local delta = math.floor( ply.healthRegenTemp )
+			local hl = math.max( math.Clamp( ply:Health() + delta, 0, 50 ), ply:Health() )
+			ply.healthRegenTemp = ply.healthRegenTemp - delta
+			ply:SetHealth( hl )
+		end
+	end
 
 end)
 
 hook.Add( "SetupMove", "brawl.jump", function( ply, mvd, cmd )
 
 	if mvd:KeyPressed( IN_JUMP ) and ply:OnGround() and ply:GetStamina() >= brawl.config.player.staminaJumpCost then
-        ply:TakeStamina( brawl.config.player.staminaJumpCost )
+		ply:TakeStamina( brawl.config.player.staminaJumpCost )
 	end
 
 end)
@@ -166,24 +166,24 @@ end)
 local maxWeapons = 10
 function meta:DoPlayerDeath( attacker, dmg )
 
-    self:CreateRagdoll( attacker, dmg )
+	self:CreateRagdoll( attacker, dmg )
 
-    local weps = self:GetWeapons()
+	local weps = self:GetWeapons()
 
-    local mapWeps = ents.FindByClass( "brawl_weapon" )
-    local numToRemove = table.Count( mapWeps ) - maxWeapons
-    for i=1, numToRemove do
-        mapWeps[i]:Remove()
-    end
+	local mapWeps = ents.FindByClass( "brawl_weapon" )
+	local numToRemove = table.Count( mapWeps ) - maxWeapons
+	for i=1, numToRemove do
+		mapWeps[i]:Remove()
+	end
 
-    for k, wep in pairs( weps ) do
-        self:DropWeapon( wep )
-    end
+	for k, wep in pairs( weps ) do
+		self:DropWeapon( wep )
+	end
 
-    self:AddDeaths( 1 )
-    if attacker ~= self and attacker:IsPlayer() then
-        attacker:AddFrags( 1 )
-    end
+	self:AddDeaths( 1 )
+	if attacker ~= self and attacker:IsPlayer() then
+		attacker:AddFrags( 1 )
+	end
 
 	if self.TeamSwitch then
 		self.TeamSwitch = nil
@@ -192,49 +192,49 @@ function meta:DoPlayerDeath( attacker, dmg )
 		SetGlobalInt( "brawl.KillsThisMode", GetGlobalInt( "brawl.KillsThisMode" ) + 1 )
 	end
 
-    local data = {
-        victim = self,
-        attacker = dmg:GetAttacker(),
-        inflictor = dmg:GetInflictor(),
-        damage = dmg:GetDamage(),
-        pos = dmg:GetDamagePosition(),
-        type = dmg:GetDamageType()
-    }
+	local data = {
+		victim = self,
+		attacker = dmg:GetAttacker(),
+		inflictor = dmg:GetInflictor(),
+		damage = dmg:GetDamage(),
+		pos = dmg:GetDamagePosition(),
+		type = dmg:GetDamageType()
+	}
 
-    net.Start( "brawl.killfeed" )
-        net.WriteTable( data )
-    net.Broadcast()
+	net.Start( "brawl.killfeed" )
+		net.WriteTable( data )
+	net.Broadcast()
 
-    brawl.msg( "[KillFeed] %s -> %s (%s)", tostring(data.attacker), tostring(data.victim), tostring(inflictor) )
+	brawl.msg( "[KillFeed] %s -> %s (%s)", tostring(data.attacker), tostring(data.victim), tostring(inflictor) )
 
 end
 
 function meta:CanPickupWeapon( wep )
 
-    return true
+	return true
 
 end
 
 function meta:DropWeapon( wep )
 
-    if isstring( wep ) then
-        wep = self:GetWeapon( wep )
-    end
+	if isstring( wep ) then
+		wep = self:GetWeapon( wep )
+	end
 
-    if not IsValid( wep ) then return end
-    if brawl.weapons.melee[ wep:GetClass() ] then return end
+	if not IsValid( wep ) then return end
+	if brawl.weapons.melee[ wep:GetClass() ] then return end
 
-    local drop = ents.Create( "brawl_weapon" )
-    drop:Spawn()
-    drop:SetWeapon( wep )
-    drop:SetPos( self:GetShootPos() )
+	local drop = ents.Create( "brawl_weapon" )
+	drop:Spawn()
+	drop:SetWeapon( wep )
+	drop:SetPos( self:GetShootPos() )
 
-    local phys = drop:GetPhysicsObject()
-    if phys then
-        phys:SetVelocity( self:GetAimVector() * 200 )
-    end
+	local phys = drop:GetPhysicsObject()
+	if phys then
+		phys:SetVelocity( self:GetAimVector() * 200 )
+	end
 
-    self:StripWeapon( wep:GetClass() )
+	self:StripWeapon( wep:GetClass() )
 
 end
 
@@ -243,18 +243,18 @@ corpseLifetime = 120
 brawl.corpses = brawl.corpses or {}
 
 local bones = {
-    [1] = "ValveBiped.Bip01_Head1",
-    [2] = "ValveBiped.Bip01_Spine2",
-    [3] = "ValveBiped.Bip01_Pelvis",
-    [4] = "ValveBiped.Bip01_L_Clavicle",
-    [5] = "ValveBiped.Bip01_R_Clavicle",
-    [6] = "ValveBiped.Bip01_L_Calf",
-    [7] = "ValveBiped.Bip01_R_Calf",
+	[1] = "ValveBiped.Bip01_Head1",
+	[2] = "ValveBiped.Bip01_Spine2",
+	[3] = "ValveBiped.Bip01_Pelvis",
+	[4] = "ValveBiped.Bip01_L_Clavicle",
+	[5] = "ValveBiped.Bip01_R_Clavicle",
+	[6] = "ValveBiped.Bip01_L_Calf",
+	[7] = "ValveBiped.Bip01_R_Calf",
 }
 
 function meta:CreateRagdoll( attacker, dmg )
 
-    local oldCorpse = self:GetNWEntity( "Corpse" )
+	local oldCorpse = self:GetNWEntity( "Corpse" )
 
 	-- remove old corpses
 	local corpses = 1
@@ -269,9 +269,9 @@ function meta:CreateRagdoll( attacker, dmg )
 	if maxCorpses >= 0 && corpses > maxCorpses then
 		for i = 0, corpses do
 			if corpses > maxCorpses then
-                if IsValid( brawl.corpses[1] ) then
-    				brawl.corpses[1]:Remove()
-                end
+				if IsValid( brawl.corpses[1] ) then
+					brawl.corpses[1]:Remove()
+				end
 				table.remove( brawl.corpses, 1 )
 				corpses = corpses - 1
 			else
@@ -280,7 +280,7 @@ function meta:CreateRagdoll( attacker, dmg )
 		end
 	end
 
-    -- create new corpse
+	-- create new corpse
 	local data = duplicator.CopyEntTable( self )
 	local corpse = ents.Create( "prop_ragdoll" )
 		duplicator.DoGeneric( corpse, data )
@@ -293,7 +293,7 @@ function meta:CreateRagdoll( attacker, dmg )
 	end
 	corpse:SetNWEntity( "Owner", self )
 
-    local force = dmg:GetDamageForce()
+	local force = dmg:GetDamageForce()
 	local vel = self:GetVelocity()
 	local phyObjNum = corpse:GetPhysicsObjectCount()
 	for id = 0, phyObjNum - 1 do
@@ -301,16 +301,16 @@ function meta:CreateRagdoll( attacker, dmg )
 		local PhysObj = corpse:GetPhysicsObjectNum( id )
 		if IsValid( PhysObj ) then
 
-            local bone = corpse:TranslatePhysBoneToBone( id )
+			local bone = corpse:TranslatePhysBoneToBone( id )
 			local pos, ang = self:GetBonePosition( bone )
 			PhysObj:SetPos( pos )
 			PhysObj:SetAngles( ang )
 			PhysObj:AddVelocity( vel )
 
-            if not self.lastHitGroup then continue end
-            if bones[ self.lastHitGroup ] == self:GetBoneName( bone ) then
-                PhysObj:AddVelocity( force * 2 / PhysObj:GetMass() )
-            end
+			if not self.lastHitGroup then continue end
+			if bones[ self.lastHitGroup ] == self:GetBoneName( bone ) then
+				PhysObj:AddVelocity( force * 2 / PhysObj:GetMass() )
+			end
 
 		end
 
@@ -326,12 +326,12 @@ end
 
 function meta:SetScore( score )
 
-    self:SetNWInt( "brawl.score", score )
+	self:SetNWInt( "brawl.score", score )
 
 end
 
 function meta:AddScore( score )
 
-    self:SetNWInt( "brawl.score", self:GetNWInt( "brawl.score" ) + score )
+	self:SetNWInt( "brawl.score", self:GetNWInt( "brawl.score" ) + score )
 
 end

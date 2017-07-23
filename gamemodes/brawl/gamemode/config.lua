@@ -9,78 +9,78 @@ CUSTOM CONFIGURATION FILE
 
 brawl.config.server = {
 
-    name = "[#] Brawl dev server - v" .. brawl.version,
-    password = "8",
-    loadingURL = "http://www.octothorp.team/changelog/?s=brawl",
+	name = "[#] Brawl dev server - v" .. brawl.version,
+	password = "8",
+	loadingURL = "http://www.octothorp.team/changelog/?s=brawl",
 
-    runCommands = {
-        "net_maxfilesize 64",
-        "sv_allowcslua 1"
-    },
+	runCommands = {
+		"net_maxfilesize 64",
+		"sv_allowcslua 1"
+	},
 
-    workshop = {
+	workshop = {
 		-- PMC models
 		"232636218",
 		-- COD4 sniper
 		"400617936",
 
-        -- Insurgency bullet holes
-        "297516501",
+		-- Insurgency bullet holes
+		"297516501",
 
-        -- Brawl content
-        "841059476",
+		-- Brawl content
+		"841059476",
 		"906718723",
 		"906736127",
 		"906786160",
 		"906790668",
-    },
+	},
 
 }
 
 brawl.config.player = {
-    baseWalkSpeed = 200,
-    baseRunSpeed = 300,
+	baseWalkSpeed = 200,
+	baseRunSpeed = 300,
 
-    staminaRegenDelay = 2,
-    staminaRegenRate = 15,
-    staminaSprintCost = 25,
-    staminaJumpCost = 15,
-    healthRegenDelay = 10,
-    healthRegenRate = 2,
+	staminaRegenDelay = 2,
+	staminaRegenRate = 15,
+	staminaSprintCost = 25,
+	staminaJumpCost = 15,
+	healthRegenDelay = 10,
+	healthRegenRate = 2,
 }
 
 brawl.config.maps = {
-    dm_basebunker = {
-        name = "Base Bunker", workshop = "812797510",
-        img = "http://images.akamai.steamusercontent.com/ugc/105103266291569905/B36E449E2CEEA7806542A3C1741399681DB606F3/",
-    },
-    ahl2_fishdock = {
-        name = "Fish Docks", workshop = "914554901",
-        img = "https://steamuserimages-a.akamaihd.net/ugc/817810804115581770/224BB5D5C35C8B2D72DEB408C10E834014D1221B/",
-    },
-    dm_island18_night = {
-        name = "Island 18", workshop = "284612894",
-        img = "https://steamuserimages-a.akamaihd.net/ugc/577901446709652492/0E3F2454B9E1AE67A8CCC22F284B1183F02DF155/",
-    },
-    dm_montana = {
-        name = "Montana", workshop = "563904685",
-        img = "http://images.akamai.steamusercontent.com/ugc/392173784278456259/464BBA8D0D4F766BE829F60D291458D993FADE54/",
-    },
-    dm_torque = {
-        name = "Torque", workshop = "442990905",
-        img = "http://images.akamai.steamusercontent.com/ugc/544152440190283835/F6E77E18AD0A573938CD33380B427DE2C3811C2D/",
-    },
-    ttt_rooftops_2016_v1 = {
-        name = "Rooftops", workshop = "534491717",
-        img = "http://images.akamai.steamusercontent.com/ugc/574565056146367881/1954061909AB6D49DD91E8704150FA3942A27C7E/",
-    },
-    de_desert_atrocity_v3 = {
-        name = "Atrocity", workshop = "242494243",
-        img = "http://images.akamai.steamusercontent.com/ugc/3300317637498361777/12D826D67E9592CC37D866016FEE13B4087625E5/",
-    },
+	dm_basebunker = {
+		name = "Base Bunker", workshop = "812797510",
+		img = "http://images.akamai.steamusercontent.com/ugc/105103266291569905/B36E449E2CEEA7806542A3C1741399681DB606F3/",
+	},
+	ahl2_fishdock = {
+		name = "Fish Docks", workshop = "914554901",
+		img = "https://steamuserimages-a.akamaihd.net/ugc/817810804115581770/224BB5D5C35C8B2D72DEB408C10E834014D1221B/",
+	},
+	dm_island18_night = {
+		name = "Island 18", workshop = "284612894",
+		img = "https://steamuserimages-a.akamaihd.net/ugc/577901446709652492/0E3F2454B9E1AE67A8CCC22F284B1183F02DF155/",
+	},
+	dm_montana = {
+		name = "Montana", workshop = "563904685",
+		img = "http://images.akamai.steamusercontent.com/ugc/392173784278456259/464BBA8D0D4F766BE829F60D291458D993FADE54/",
+	},
+	dm_torque = {
+		name = "Torque", workshop = "442990905",
+		img = "http://images.akamai.steamusercontent.com/ugc/544152440190283835/F6E77E18AD0A573938CD33380B427DE2C3811C2D/",
+	},
+	ttt_rooftops_2016_v1 = {
+		name = "Rooftops", workshop = "534491717",
+		img = "http://images.akamai.steamusercontent.com/ugc/574565056146367881/1954061909AB6D49DD91E8704150FA3942A27C7E/",
+	},
+	de_desert_atrocity_v3 = {
+		name = "Atrocity", workshop = "242494243",
+		img = "http://images.akamai.steamusercontent.com/ugc/3300317637498361777/12D826D67E9592CC37D866016FEE13B4087625E5/",
+	},
 	de_forest = {
 		name = "Forest", workshop = "106821161",
-        img = "https://steamuserimages-a.akamaihd.net/ugc/920118814791669595/29413F17721E7E2750D3C0F9A8F26CFEC9230B10/",
+		img = "https://steamuserimages-a.akamaihd.net/ugc/920118814791669595/29413F17721E7E2750D3C0F9A8F26CFEC9230B10/",
 	},
 	-- rp_eastcoast_v4b = {
 	-- 	name = "Dobrograd", workshop = "817430636",
@@ -118,7 +118,7 @@ brawl.config.maps = {
 
 brawl.config.playerModels = {
 
-    [1] = {
+	[1] = {
 		-- "models/player/pmc_1/pmc__02.mdl",
 		"models/player/pmc_2/pmc__02.mdl",
 		-- "models/player/pmc_3/pmc__02.mdl",

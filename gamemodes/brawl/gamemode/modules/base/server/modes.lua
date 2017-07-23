@@ -4,45 +4,45 @@ local oldMode =  GetGlobalString( "brawl.mode" )
 local pendingMode = GetConVar( "brawl_nextmode" ):GetString()
 
 brawl.modes = {
-    registered = {}
+	registered = {}
 }
 
 function brawl.modes.register( name, t )
 
-    if not brawl.modes.registered[ name ] then
-        brawl.modes.registered[ name ] = t
-        brawl.msg( "Registered mode: %s", name )
-    else
-        brawl.msg( "[ERROR] Mode %s is already registered!", name )
-    end
+	if not brawl.modes.registered[ name ] then
+		brawl.modes.registered[ name ] = t
+		brawl.msg( "Registered mode: %s", name )
+	else
+		brawl.msg( "[ERROR] Mode %s is already registered!", name )
+	end
 
 end
 
 function brawl.modes.select( name )
 
-    if not brawl.modes.registered[ name ] then
-        brawl.msg( "[ERROR] No such mode: %s!", name )
-        return
-    end
+	if not brawl.modes.registered[ name ] then
+		brawl.msg( "[ERROR] No such mode: %s!", name )
+		return
+	end
 
-    if brawl.modes.active then
-        brawl.modes.pending = name
-        brawl.NotifyAll({
+	if brawl.modes.active then
+		brawl.modes.pending = name
+		brawl.NotifyAll({
 			color_white, "Changing gamemode to ",
 			Color(255,212,50), brawl.modes.registered[ name ].name,
 			color_white, " next round"
 		})
-        return
-    end
+		return
+	end
 
-    brawl.modes.active = brawl.modes.registered[ name ]
-    brawl.NotifyAll({
+	brawl.modes.active = brawl.modes.registered[ name ]
+	brawl.NotifyAll({
 		color_white, "Gamemode set to ",
 		Color(255,212,50), brawl.modes.active.name
 	})
 
-    SetGlobalString( "brawl.mode", name )
-    SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
+	SetGlobalString( "brawl.mode", name )
+	SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
 	SetGlobalInt( "brawl.Rounds", 0 )
 	SetGlobalInt( "brawl.KillsThisMode", 0 )
 	brawl.NewRound()
@@ -58,34 +58,34 @@ SetGlobalInt( "brawl.Rounds", GetGlobalInt( "brawl.Rounds", 0 ) )
 
 function brawl.RoundThink()
 
-    if not brawl.modes.active.Think then
-        brawl.msg( "ERROR: Mode has no Think logic!" )
-        return
-    end
+	if not brawl.modes.active.Think then
+		brawl.msg( "ERROR: Mode has no Think logic!" )
+		return
+	end
 
-    brawl.modes.active.Think()
+	brawl.modes.active.Think()
 
 end
 hook.Add( "Think", "brawl.RoundThink", brawl.RoundThink )
 
 function brawl.EndRound( data )
 
-    if not brawl.modes.active.EndRound then
-        brawl.msg( "ERROR: Mode has no EndRound logic!" )
-        return
-    end
+	if not brawl.modes.active.EndRound then
+		brawl.msg( "ERROR: Mode has no EndRound logic!" )
+		return
+	end
 
-    brawl.modes.active.EndRound( data )
+	brawl.modes.active.EndRound( data )
 
-    net.Start( "brawl.endRound" )
-        net.WriteTable( data )
-    net.Broadcast()
+	net.Start( "brawl.endRound" )
+		net.WriteTable( data )
+	net.Broadcast()
 
 end
 
 function brawl.NewRound()
 
-    SetGlobalInt( "brawl.Rounds", GetGlobalInt( "brawl.Rounds" ) + 1 )
+	SetGlobalInt( "brawl.Rounds", GetGlobalInt( "brawl.Rounds" ) + 1 )
 	SetGlobalInt( "brawl.KillsThisRound", 0 )
 	if math.random(10) == 1 then
 		SetGlobalString( "brawl.mode.category", "none" )
@@ -94,127 +94,127 @@ function brawl.NewRound()
 		SetGlobalString( "brawl.mode.category", cat )
 	end
 
-    if GetGlobalInt( "brawl.Rounds" ) > (brawl.modes.active.maxRounds or brawl.config.modes.maxRounds) then
-        brawl.VoteStart()
-        return
-    end
+	if GetGlobalInt( "brawl.Rounds" ) > (brawl.modes.active.maxRounds or brawl.config.modes.maxRounds) then
+		brawl.VoteStart()
+		return
+	end
 
-    if brawl.modes.pending then
-        brawl.modes.active = nil
-        brawl.modes.select( brawl.modes.pending )
-    end
+	if brawl.modes.pending then
+		brawl.modes.active = nil
+		brawl.modes.select( brawl.modes.pending )
+	end
 
-    brawl.msg( "Starting round #%d.", GetGlobalInt( "brawl.Rounds" ) )
+	brawl.msg( "Starting round #%d.", GetGlobalInt( "brawl.Rounds" ) )
 
-    if not brawl.modes.active.NewRound then
-        brawl.msg( "ERROR: Mode has no NewRound logic!" )
-        return
-    end
+	if not brawl.modes.active.NewRound then
+		brawl.msg( "ERROR: Mode has no NewRound logic!" )
+		return
+	end
 
-    brawl.modes.active.NewRound()
-    SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
+	brawl.modes.active.NewRound()
+	SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
 
 end
 
 function brawl.PlayerCanSpectate( ply, ent )
 
-    if not brawl.modes.active.PlayerCanSpectate then
-        return true
-    end
+	if not brawl.modes.active.PlayerCanSpectate then
+		return true
+	end
 
-    brawl.modes.active.PlayerCanSpectate( ply, ent )
+	brawl.modes.active.PlayerCanSpectate( ply, ent )
 
 end
 
 function brawl.PlayerCanTalkTo( listener, talker, team, text )
 
-    if not brawl.modes.active.PlayerCanTalkTo then
-        return true
-    end
+	if not brawl.modes.active.PlayerCanTalkTo then
+		return true
+	end
 
-    return brawl.modes.active.PlayerCanTalkTo( listener, talker, team, text )
+	return brawl.modes.active.PlayerCanTalkTo( listener, talker, team, text )
 
 end
 
 function brawl.DeathThink( ply )
 
-    if not brawl.modes.active.DeathThink then
-        return true
-    end
+	if not brawl.modes.active.DeathThink then
+		return true
+	end
 
-    brawl.modes.active.DeathThink( ply )
+	brawl.modes.active.DeathThink( ply )
 
 end
 
 function brawl.PlayerInitialSpawn( ply )
 
-    if not brawl.modes.active.PlayerInitialSpawn then
-        ply:Spawn()
-    end
+	if not brawl.modes.active.PlayerInitialSpawn then
+		ply:Spawn()
+	end
 
-    brawl.modes.active.PlayerInitialSpawn( ply )
-    SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
+	brawl.modes.active.PlayerInitialSpawn( ply )
+	SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
 
 end
 
 function brawl.PlayerDeath( ply )
 
-    if brawl.modes.active.PlayerDeath then
-        brawl.modes.active.PlayerDeath( ply )
-    end
+	if brawl.modes.active.PlayerDeath then
+		brawl.modes.active.PlayerDeath( ply )
+	end
 
 end
 
 function brawl.DoPlayerDeath( victim, attacker, dmg )
 
-    if brawl.modes.active.DoPlayerDeath then
-        brawl.modes.active.DoPlayerDeath( victim, attacker, dmg )
-    end
+	if brawl.modes.active.DoPlayerDeath then
+		brawl.modes.active.DoPlayerDeath( victim, attacker, dmg )
+	end
 
 end
 
 function brawl.SwitchTeam( ply, tID, force )
 
-    local allowedTeams = {}
-    local minNumber = math.huge
-    for _, k in pairs( brawl.modes.active.teams ) do
-        if k == ply:Team() then continue end
-        if team.NumPlayers( k ) < minNumber then
-            minNumber = team.NumPlayers( k )
-            allowedTeams = { [k] = true }
-        elseif team.NumPlayers( k ) == minNumber then
-            allowedTeams[ k ] = true
-        end
-    end
+	local allowedTeams = {}
+	local minNumber = math.huge
+	for _, k in pairs( brawl.modes.active.teams ) do
+		if k == ply:Team() then continue end
+		if team.NumPlayers( k ) < minNumber then
+			minNumber = team.NumPlayers( k )
+			allowedTeams = { [k] = true }
+		elseif team.NumPlayers( k ) == minNumber then
+			allowedTeams[ k ] = true
+		end
+	end
 
-    if tID and tID == ply:Team() then
-        ply:Notify( "You are already in this team", "error" )
-        return
-    end
+	if tID and tID == ply:Team() then
+		ply:Notify( "You are already in this team", "error" )
+		return
+	end
 
-    local t, k = table.Random( allowedTeams )
-    tID = tID or k
-    print(tID)
+	local t, k = table.Random( allowedTeams )
+	tID = tID or k
+	print(tID)
 
-    if tID == ply:Team() then
-        ply:Notify( "You cannot change team at this moment", "error" )
-        return
-    end
+	if tID == ply:Team() then
+		ply:Notify( "You cannot change team at this moment", "error" )
+		return
+	end
 
-    if not team.Valid( tID ) then
-        ply:Notify( "This team does not exist", "error" )
-        return
-    end
+	if not team.Valid( tID ) then
+		ply:Notify( "This team does not exist", "error" )
+		return
+	end
 
-    if not force and not allowedTeams[ tID ] then
-        ply:Notify( "You cannot join this team", "error" )
-        return
-    end
+	if not force and not allowedTeams[ tID ] then
+		ply:Notify( "You cannot join this team", "error" )
+		return
+	end
 
 	ply.TeamSwitch = true
-    ply:KillSilent()
-    ply:SetTeam( tID )
-    brawl.NotifyAll({
+	ply:KillSilent()
+	ply:SetTeam( tID )
+	brawl.NotifyAll({
 		team.GetColor(tID), ply:Name(),
 		color_white, " joined team ",
 		team.GetColor(tID), team.GetName( tID )
@@ -224,16 +224,16 @@ end
 
 concommand.Add( "brawl_switchteam", function( ply, cmd, args, argStr )
 
-    local tID = tonumber(args[1])
-    brawl.SwitchTeam( ply, tID )
+	local tID = tonumber(args[1])
+	brawl.SwitchTeam( ply, tID )
 
 end)
 
 local _, mode = table.Random( brawl.modes.registered )
 if pendingMode ~= "" then
-    mode = pendingMode
-    GetConVar( "brawl_nextmode" ):SetString( "" )
+	mode = pendingMode
+	GetConVar( "brawl_nextmode" ):SetString( "" )
 elseif oldMode ~= "" then
-    mode = oldMode
+	mode = oldMode
 end
 brawl.modes.select( mode )

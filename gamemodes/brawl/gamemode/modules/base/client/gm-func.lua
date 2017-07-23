@@ -10,7 +10,7 @@ end
 hook.Add( "SetupMove", "brawl.jump", function( ply, mvd, cmd )
 
 	if mvd:KeyPressed( IN_JUMP ) then
-        if ply:GetStamina() < brawl.config.player.staminaJumpCost then mvd:RemoveKeys( IN_JUMP ) end
+		if ply:GetStamina() < brawl.config.player.staminaJumpCost then mvd:RemoveKeys( IN_JUMP ) end
 	end
 
 end)

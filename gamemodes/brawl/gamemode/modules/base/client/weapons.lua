@@ -139,27 +139,27 @@ end
 local blur = Material( "pp/blurscreen" )
 hook.Add( "RenderScreenspaceEffects", "brawl.weapons", function()
 
-    local state = brawl.weaponDrawer.al
-    local a = 1 - math.pow( 1 - state, 2 )
+	local state = brawl.weaponDrawer.al
+	local a = 1 - math.pow( 1 - state, 2 )
 
-    if a > 0 then
-        DrawColorModify({
-            [ "$pp_colour_brightness" ] = 0,
-            [ "$pp_colour_contrast" ] = 1 + 0.5 * a,
-            [ "$pp_colour_colour" ] = 1 - a,
-        })
+	if a > 0 then
+		DrawColorModify({
+			[ "$pp_colour_brightness" ] = 0,
+			[ "$pp_colour_contrast" ] = 1 + 0.5 * a,
+			[ "$pp_colour_colour" ] = 1 - a,
+		})
 
-    	surface.SetDrawColor( 255, 255, 255, a * 255 )
-    	surface.SetMaterial( blur )
+		surface.SetDrawColor( 255, 255, 255, a * 255 )
+		surface.SetMaterial( blur )
 
-    	for i = 1, 3 do
-    		blur:SetFloat( "$blur", a * i * 2 )
-    		blur:Recompute()
+		for i = 1, 3 do
+			blur:SetFloat( "$blur", a * i * 2 )
+			blur:Recompute()
 
-    		render.UpdateScreenEffectTexture()
-    		surface.DrawTexturedRect( -1, -1, ScrW() + 2, ScrH() + 2 )
-    	end
-    end
+			render.UpdateScreenEffectTexture()
+			surface.DrawTexturedRect( -1, -1, ScrW() + 2, ScrH() + 2 )
+		end
+	end
 
 end)
 

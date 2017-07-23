@@ -4,50 +4,50 @@ local meta = FindMetaTable "Player"
 
 function meta:SetXP( val )
 
-    self:SetNWInt( "XP", tonumber(val) )
-    self:CheckLevel()
+	self:SetNWInt( "XP", tonumber(val) )
+	self:CheckLevel()
 
 end
 
 function meta:AddXP( val, t )
 
-    self:SetNWInt( "XP", self:GetXP() + val )
+	self:SetNWInt( "XP", self:GetXP() + val )
 
-    if val > 0 then
-        net.Start( "brawl.exp.add" )
-            net.WriteUInt( val, 16 )
-            net.WriteString( t or "something" )
-        net.Send( self )
-    end
+	if val > 0 then
+		net.Start( "brawl.exp.add" )
+			net.WriteUInt( val, 16 )
+			net.WriteString( t or "something" )
+		net.Send( self )
+	end
 
-    self:CheckLevel()
+	self:CheckLevel()
 
 end
 
 function meta:SetLevel( val )
 
-    self:SetNWInt( "Level", tonumber(val) )
+	self:SetNWInt( "Level", tonumber(val) )
 
 end
 
 function meta:LevelUp()
 
-    local newLevel = self:GetLevel() + 1
-    self:SetLevel( newLevel )
+	local newLevel = self:GetLevel() + 1
+	self:SetLevel( newLevel )
 
-    net.Start( "brawl.exp.levelUp" )
-        net.WriteString( "You've reached level " .. newLevel )
-    net.Send( self )
+	net.Start( "brawl.exp.levelUp" )
+		net.WriteString( "You've reached level " .. newLevel )
+	net.Send( self )
 
 end
 
 function meta:CheckLevel()
 
-    local expForLevelUp = brawl.exp.calculateLevelEXP( self:GetLevel() + 1 )
-    if self:GetXP() >= expForLevelUp then
-        self:AddXP( -expForLevelUp )
-        self:LevelUp()
-    end
+	local expForLevelUp = brawl.exp.calculateLevelEXP( self:GetLevel() + 1 )
+	if self:GetXP() >= expForLevelUp then
+		self:AddXP( -expForLevelUp )
+		self:LevelUp()
+	end
 
 end
 
@@ -77,13 +77,13 @@ hook.Add( "DoPlayerDeath", "brawl.exp", function( victim, attacker, dmg )
 	end
 	victim.attacks = nil
 
-    if attacker:IsPlayer() and victim ~= attacker then
-        if brawl.modes.active.teams and attacker:Team() == victim:Team() then return end
+	if attacker:IsPlayer() and victim ~= attacker then
+		if brawl.modes.active.teams and attacker:Team() == victim:Team() then return end
 		attacker.killStreak = attacker.killStreak + 1
 		attacker.killsThisLife = attacker.killsThisLife + 1
 		timer.Stop( "killStreakReset" .. attacker:UserID() )
 		timer.Start( "killStreakReset" .. attacker:UserID() )
-        attacker:AddXP( 100, "Kill" )
+		attacker:AddXP( 100, "Kill" )
 
 		if GetGlobalInt( "brawl.KillsThisRound" ) == 0 then
 			attacker:AddXP( 50, "First blood" )
@@ -100,19 +100,19 @@ hook.Add( "DoPlayerDeath", "brawl.exp", function( victim, attacker, dmg )
 			brawl.NotifyAll( killsThisLife[3]:format( attacker:Name() ) )
 		end
 
-        local wep = attacker:GetActiveWeapon()
-        if IsValid( wep ) and table.HasValue( brawl.config.weapons.melee, wep:GetClass() ) then
-            attacker:AddXP( 100, "Melee kill" )
-        else
-            if victim.lastHitGroup == 1 then -- headshot
-                attacker:AddXP( 50, "Headshot" )
-            end
+		local wep = attacker:GetActiveWeapon()
+		if IsValid( wep ) and table.HasValue( brawl.config.weapons.melee, wep:GetClass() ) then
+			attacker:AddXP( 100, "Melee kill" )
+		else
+			if victim.lastHitGroup == 1 then -- headshot
+				attacker:AddXP( 50, "Headshot" )
+			end
 
-            if victim:GetPos():DistToSqr( attacker:GetPos() ) > 4000000 then
-                attacker:AddXP( 50, "Long shot" )
-            end
-        end
-    end
+			if victim:GetPos():DistToSqr( attacker:GetPos() ) > 4000000 then
+				attacker:AddXP( 50, "Long shot" )
+			end
+		end
+	end
 
 end)
 
@@ -128,9 +128,9 @@ local function migrate()
 			CREATE TABLE IF NOT EXISTS brawl_users (
 			steamID VARCHAR(30) NOT NULL ,
 			nick VARCHAR(50) NOT NULL ,
-            connects INT NOT NULL ,
-            playtime INT NOT NULL ,
-            level INT NOT NULL ,
+			connects INT NOT NULL ,
+			playtime INT NOT NULL ,
+			level INT NOT NULL ,
 			exp INT NOT NULL ,
 			PRIMARY KEY (steamID)
 		)
@@ -153,8 +153,8 @@ hook.Add( "PlayerAuthed", "brawl.CheckUserData", function( ply, steamID, uID )
 				]], MySQLite.SQLStr( steamID ), MySQLite.SQLStr( ply:Name() ), 1, 0, 1, 0
 			))
 
-            ply:SetLevel( 1 )
-            ply:SetXP( 0 )
+			ply:SetLevel( 1 )
+			ply:SetXP( 0 )
 
 			if brawl.debug then
 				brawl.msg( "%s (%s) joined first time, adding to users table", ply:Name(), ply:SteamID() )
@@ -166,8 +166,8 @@ hook.Add( "PlayerAuthed", "brawl.CheckUserData", function( ply, steamID, uID )
 				]], MySQLite.SQLStr( ply:Name() ), MySQLite.SQLStr( steamID )
 			))
 
-            ply:SetLevel( res[1].level )
-            ply:SetXP( res[1].exp )
+			ply:SetLevel( res[1].level )
+			ply:SetXP( res[1].exp )
 
 			if brawl.debug then
 				brawl.msg( "%s's (%s) entry updated in users table", ply:Name(), ply:SteamID() )
@@ -179,19 +179,19 @@ end)
 
 local function saveUser( ply )
 
-    MySQLite.query(string.format([[
-        UPDATE brawl_users
-        SET
-            playtime = playtime + %d,
-            level = %d,
-            exp = %d
-        WHERE steamID = %s
-        ]], math.floor( ply:TimeConnected() ), ply:GetLevel(), ply:GetXP(), MySQLite.SQLStr( ply:SteamID() )
-    ))
+	MySQLite.query(string.format([[
+		UPDATE brawl_users
+		SET
+			playtime = playtime + %d,
+			level = %d,
+			exp = %d
+		WHERE steamID = %s
+		]], math.floor( ply:TimeConnected() ), ply:GetLevel(), ply:GetXP(), MySQLite.SQLStr( ply:SteamID() )
+	))
 
-    if brawl.debug then
-        brawl.msg( "%s's (%s) entry updated in users table", ply:Name(), ply:SteamID() )
-    end
+	if brawl.debug then
+		brawl.msg( "%s's (%s) entry updated in users table", ply:Name(), ply:SteamID() )
+	end
 
 end
 
@@ -203,8 +203,8 @@ end)
 
 hook.Add( "ShutDown", "brawl.SaveUserData", function( ply )
 
-    for k, ply in pairs( player.GetAll() ) do
-        saveUser( ply )
-    end
+	for k, ply in pairs( player.GetAll() ) do
+		saveUser( ply )
+	end
 
 end)

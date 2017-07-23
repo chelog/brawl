@@ -1,10 +1,10 @@
 local mode = {
-    name = "FFA Elimination"
+	name = "FFA Elimination"
 }
 
 function mode.hud()
 
-    -- something
+	-- something
 
 end
 

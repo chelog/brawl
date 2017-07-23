@@ -1,10 +1,10 @@
 local mode = {
-    name = "FFA Deathmatch"
+	name = "FFA Deathmatch"
 }
 
 function mode.hud()
 
-    -- something
+	-- something
 
 end
 
