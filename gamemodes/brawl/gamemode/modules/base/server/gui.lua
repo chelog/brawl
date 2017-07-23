@@ -1,28 +1,30 @@
-function brawl.Notify( ply, text, t )
+function brawl.Notify( ply, data, t )
 
-    if not IsValid( ply ) then return end
+	if not istable(data) then data = {data} end
+
+    if not IsValid( ply ) then brawl.NotifyAll( data, t ) end
     net.Start( "brawl.notify" )
         net.WriteTable({
-            text = text,
+            data = data,
             type = t or "info"
         })
     net.Send( ply )
 
 end
 
-function brawl.NotifyAll( text, t )
+function brawl.NotifyAll( data, t )
 
     for k, ply in pairs( player.GetAll() ) do
-        brawl.Notify( ply, text, t )
+        brawl.Notify( ply, data, t )
     end
 
-    brawl.msg( "[NotifyAll] %s", text )
+    brawl.msg( "[NotifyAll] %s", data )
 
 end
 
 local meta = FindMetaTable "Player"
 
-function meta:Notify( text, t )
+function meta:Notify( data, t )
 
     brawl.Notify( self, text, t )
 

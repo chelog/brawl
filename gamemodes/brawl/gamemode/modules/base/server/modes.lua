@@ -27,12 +27,19 @@ function brawl.modes.select( name )
 
     if brawl.modes.active then
         brawl.modes.pending = name
-        brawl.NotifyAll( "Changing gamemode to " .. brawl.modes.registered[ name ].name .. " next round" )
+        brawl.NotifyAll({
+			color_white, "Changing gamemode to ",
+			Color(255,212,50), brawl.modes.registered[ name ].name,
+			color_white, " next round"
+		})
         return
     end
 
     brawl.modes.active = brawl.modes.registered[ name ]
-    brawl.NotifyAll("Gamemode set to " .. brawl.modes.active.name )
+    brawl.NotifyAll({
+		color_white, "Gamemode set to ",
+		Color(255,212,50), brawl.modes.active.name
+	})
 
     SetGlobalString( "brawl.mode", name )
     SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
@@ -207,7 +214,11 @@ function brawl.SwitchTeam( ply, tID, force )
 	ply.TeamSwitch = true
     ply:KillSilent()
     ply:SetTeam( tID )
-    brawl.NotifyAll( ply:Name() .. " joined team " .. team.GetName( tID ) )
+    brawl.NotifyAll({
+		team.GetColor(tID), ply:Name(),
+		color_white, " joined team ",
+		team.GetColor(tID), team.GetName( tID )
+	})
 
 end
 

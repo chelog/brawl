@@ -10,7 +10,7 @@ CUSTOM CONFIGURATION FILE
 brawl.config.server = {
 
     name = "[#] Brawl dev server - v" .. brawl.version,
-    password = "",
+    password = "8",
     loadingURL = "http://www.octothorp.team/changelog/?s=brawl",
 
     runCommands = {

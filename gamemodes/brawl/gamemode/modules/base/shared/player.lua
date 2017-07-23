@@ -50,6 +50,15 @@ function meta:SelectWeaponByCategory( cat )
 
 end
 
+function meta:GetTeamColor()
+
+	local t = self:Team()
+	if t < 1 or t > 999 then return Color(255,212,50) end
+
+	return team.GetColor(t)
+
+end
+
 hook.Add( "PlayerFootstep", "brawl.step", function( ply )
 
     if ply:GetAbsVelocity():LengthSqr() < 16900 then

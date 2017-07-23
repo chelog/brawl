@@ -44,7 +44,10 @@ function mode.EndRound( data )
         SetGlobalFloat( "RoundStart", CurTime() + intermissionTime )
 
         SetGlobalInt( "brawl.RoundState", 3 )
-        brawl.NotifyAll( ply:Name() .. " won the round!" )
+        brawl.NotifyAll({
+			Color(255,212,50), ply:Name(),
+			color_white, " won the round!"
+		})
         ply:AddScore( 1 )
 
         ply:AddXP( 250, "Round winner" )

@@ -722,7 +722,6 @@ local notificationW = 200
 function brawl.hud.drawNotifications()
 
     local curY = 0
-    local lh = brawl.FontHeight( "brawl.hud.notification" )
     for k1, v in pairs( brawl.hud.notifications ) do
         if CurTime() > v.removeTime then
             table.remove( brawl.hud.notifications, k1 )
@@ -741,7 +740,9 @@ function brawl.hud.drawNotifications()
             draw.RoundedBox( 5, offset + 10, 70 + curY, w + 20, h + 20, col )
             draw.RoundedBox( 4, offset + 11, 71 + curY, w + 18, h + 20 - 2, Color( 0,0,0, 200 * al ) )
 
+			surface.SetAlphaMultiplier( al )
             v.text:Draw( offset + 20, 80 + curY, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+			surface.SetAlphaMultiplier( 1 )
 
             curY = curY + (h + 25) * al
         end
@@ -750,16 +751,18 @@ function brawl.hud.drawNotifications()
 
 end
 
-function brawl.hud.addNotification( text, t )
+function brawl.hud.addNotification( data, t )
+
+	print(string.composeMarkup( {font = "brawl.hud.notification"}, data ))
 
     table.insert(brawl.hud.notifications, {
-        text = markup.Parse( "<font=brawl.hud.notification><colour=255, 255, 255, 255>" .. text .. "</colour></font>", notificationW - 20 ),
+        text = markup.Parse( string.composeMarkup( {font = "brawl.hud.notification"}, unpack(data) ), notificationW - 20 ),
         type = t,
         addTime = CurTime(),
         removeTime = CurTime() + 10
     })
 
-    print( "NOTIFICATION: " .. text )
+    MsgC( "NOTIFICATION: ", unpack(data), "\n" )
 
     if not IsValid( LocalPlayer() ) then return end
     LocalPlayer():EmitSound( "cw/selector.wav" )
@@ -778,20 +781,28 @@ net.Receive( "brawl.killfeed", function( len )
     local data = net.ReadTable()
     if not data.victim:IsPlayer() then return end
 
-    local killer = data.attacker:IsPlayer() and data.attacker:Name() or "World"
+	local killer = data.attacker:IsPlayer() and data.attacker:Name() or "World"
+	local killerCol = data.attacker:IsPlayer() and data.attacker:GetTeamColor() or color_white
+    local victimCol = data.victim:GetTeamColor() or color_white
     local wep = IsValid( data.inflictor ) and data.inflictor:GetClass() or "something"
     if wep == "player" then
         local awep = data.inflictor:GetActiveWeapon()
         wep = IsValid( awep ) and (awep.PrintName or awep:GetClass()) or "something"
     end
 
-    brawl.hud.addNotification( killer .. " killed " .. data.victim:Name() .. " with " .. wep, "data.type" )
+    brawl.hud.addNotification({
+		killerCol, killer,
+		color_white, " killed ",
+		victimCol, data.victim:Name(),
+		color_white, " with ",
+		wep
+	}, "data.type" )
 
 end)
 
 net.Receive( "brawl.notify", function( len, ply )
 
-    local data = net.ReadTable()
-    brawl.hud.addNotification( data.text, data.type )
+    local d = net.ReadTable()
+    brawl.hud.addNotification( d.data, d.type )
 
 end)

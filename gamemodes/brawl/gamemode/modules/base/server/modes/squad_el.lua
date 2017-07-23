@@ -43,7 +43,10 @@ function mode.EndRound( data )
 
         team.AddScore( data.winner, 1 )
         SetGlobalInt( "brawl.RoundState", 3 )
-        brawl.NotifyAll( team.GetName( data.winner ) .. " squad won the round!" )
+        brawl.NotifyAll({
+			team.GetColor( data.winner ), team.GetName( data.winner ) .. " squad",
+			color_white, " won the round!"
+		})
 
         for k, ply in pairs( team.GetPlayers(t) ) do
             ply:AddXP( 200, "Round winner" )
@@ -139,7 +142,11 @@ function mode.PlayerInitialSpawn( ply )
     timer.Simple(0,function()
         local t = team.BestAutoJoinTeam( ply )
         ply:SetTeam( t )
-        brawl.NotifyAll( ply:Name() .. " joined " .. team.GetName(t) .. " squad" )
+        brawl.NotifyAll(
+			team.GetColor(t), ply:Name(),
+			color_white, " joined ",
+			team.GetColor(t), team.GetName(t) .. " squad"
+		)
     end)
 
 end

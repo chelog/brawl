@@ -59,14 +59,20 @@ concommand.Add( "brawl_spectate", function(ply, cmd, args, argStr)
         ply:KillSilent()
         ply:StartSpectating()
         ply:SetNWBool( "SpectateOnly", true )
-        brawl.NotifyAll( ply:Name() .. " is now spectating" )
+        brawl.NotifyAll({
+			team.GetColor( ply:Team() ), ply:Name(),
+			color_white, " is now spectating"
+		})
     else
         ply:SetNWBool( "SpectateOnly", false )
         ply:SetNWBool( "Spectating", false )
         ply:KillSilent()
         ply:UnSpectate()
         ply:SetNWFloat( "RespawnTime", CurTime() )
-        brawl.NotifyAll( ply:Name() .. " is now playing" )
+		brawl.NotifyAll({
+			team.GetColor( ply:Team() ), ply:Name(),
+			color_white, " is now playing"
+		})
     end
 
 end)
