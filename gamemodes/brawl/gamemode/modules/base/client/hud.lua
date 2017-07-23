@@ -760,7 +760,8 @@ function brawl.hud.addNotification( data, t )
 		removeTime = CurTime() + 10
 	})
 
-	MsgC( "NOTIFICATION: ", unpack(data), "\n" )
+	MsgC( "NOTIFICATION: ", unpack(data) )
+	Msg( "\n" ) -- I have no idea why I can't put it as last arg in function above
 
 	if not IsValid( LocalPlayer() ) then return end
 	LocalPlayer():EmitSound( "cw/selector.wav" )
