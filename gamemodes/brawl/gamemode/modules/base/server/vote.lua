@@ -112,4 +112,13 @@ function meta:GetVoteWeight()
 
 end
 
-concommand.Add( "brawl_vote", brawl.VoteStart )
+concommand.Add( "brawl_vote", function( ply, cmd, args, argStr )
+
+	if not ply:IsSuperAdmin() then
+		brawl.Notify( ply, "You need to be superadmin for that", "error" )
+		return
+	end
+
+	brawl.VoteStart()
+
+end)
