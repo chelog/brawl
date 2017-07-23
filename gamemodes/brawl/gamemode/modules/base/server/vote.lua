@@ -111,3 +111,5 @@ function meta:GetVoteWeight()
 	return 1 + math.floor( self:GetLevel() / 10 )
 
 end
+
+concommand.Add( "brawl_vote", brawl.VoteStart )
