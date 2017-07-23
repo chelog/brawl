@@ -32,6 +32,10 @@ end
 
 concommand.Add( "brawl_notify", function( ply, cmd, args, argStr )
 
+	if not ply:IsSuperAdmin() then
+		brawl.Notify( ply, "You need to be superadmin for that", "error" )
+		return
+	end
     brawl.NotifyAll( argStr, "other" )
 
 end)
