@@ -753,8 +753,6 @@ end
 
 function brawl.hud.addNotification( data, t )
 
-	print(string.composeMarkup( {font = "brawl.hud.notification"}, data ))
-
 	table.insert(brawl.hud.notifications, {
 		text = markup.Parse( string.composeMarkup( {font = "brawl.hud.notification"}, unpack(data) ), notificationW - 20 ),
 		type = t,
