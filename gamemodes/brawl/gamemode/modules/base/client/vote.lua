@@ -1,14 +1,12 @@
 brawl.vote = {
-	maps = {},
-	modes = {},
+	data = {},
 	menu = brawl.vote and brawl.vote.menu
 }
 
 local blur = Material( "pp/blurscreen" )
 net.Receive( "brawl.vote.start", function( len )
 
-	brawl.vote.modes = net.ReadTable()
-	brawl.vote.maps = net.ReadTable()
+	brawl.vote.data = net.ReadTable()
 
 	brawl.vote.menu = vgui.Create( "DPanel" )
 	local menu = brawl.vote.menu
@@ -56,49 +54,6 @@ net.Receive( "brawl.vote.start", function( len )
 		local container = menu.container
 		container:SetPaintBackground( false )
 
-		-- modes
-		local modelist = vgui.Create( "DPanel", container )
-		modelist.Paint = function( self, w, h )
-			draw.Text({
-				font = "brawl.hud.normal",
-				text = "Next mode",
-				pos = { w / 2, 40 },
-				xalign = TEXT_ALIGN_CENTER,
-				yalign = TEXT_ALIGN_BOTTOM,
-				color = Color( 220,220,220 )
-			})
-		end
-
-		local k = 1
-		for name, data in SortedPairs( brawl.vote.modes ) do
-			local but = vgui.Create( "DButton", modelist )
-			but:SetSize( 280, 35 )
-			but:SetPos( 10, k * 40 + 10 )
-			but:SetText( "" )
-			but.Paint = function( self, w, h )
-				draw.RoundedBox( 5, 0, 0, w, h, self:IsHovered() and Color( 120,120,120, 50 ) or Color( 100,100,100, 50 ) )
-				draw.RoundedBox( 4, 1, 1, w-2, h-2, Color( 0,0,0, 200 ) )
-				draw.SimpleText( data.name, "brawl.hud.scoreboard.normal", 10, h / 2, Color( 220,220,220 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-
-				local votes = brawl.vote.modes[ name ].votes
-				if votes ~= 0 then
-					draw.RoundedBox( 4, w-28, 7, 21, 21, Color( 220,220,220 ) )
-					draw.SimpleText( votes, "brawl.hud.scoreboard.normal", w-18, 18, Color( 0,0,0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-				end
-			end
-
-			but.DoClick = function( self )
-				net.Start( "brawl.vote.update" )
-					net.WriteBit( true )
-					net.WriteString( name )
-				net.SendToServer()
-			end
-
-			k = k + 1
-		end
-		modelist:SetSize( 300, k * 40 + 15 )
-		modelist:SetPos( 0, 0 )
-
 		-- maps
 		local maplist = vgui.Create( "DPanel", container )
 		maplist.Paint = function( self, w, h )
@@ -113,17 +68,21 @@ net.Receive( "brawl.vote.start", function( len )
 		end
 
 		local k = 1
-		for name, data in SortedPairs( brawl.vote.maps ) do
+		for id, data in SortedPairs( brawl.vote.data ) do
 			local but = vgui.Create( "DButton", maplist )
-			but:SetSize( 280, 35 )
-			but:SetPos( 10, k * 40 + 10 )
+			but:SetSize( 280, 60 )
+			but:SetPos( 10, k * 65 + 10 )
 			but:SetText( "" )
 			but.Paint = function( self, w, h )
+				local mapName = brawl.config.maps[ data.map ].name
+				local modeName = brawl.modes.registered[ data.mode ].name
+
 				draw.RoundedBox( 5, 0, 0, w, h, self:IsHovered() and Color( 120,120,120, 50 ) or Color( 100,100,100, 50 ) )
 				draw.RoundedBox( 4, 1, 1, w-2, h-2, Color( 0,0,0, 200 ) )
-				draw.SimpleText( data.name, "brawl.hud.scoreboard.normal", 10, h / 2, Color( 220,220,220 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+				draw.SimpleText( mapName, "brawl.hud.scoreboard.normal", 10, h / 2 + 12, Color( 220,220,220 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+				draw.SimpleText( modeName, "brawl.hud.scoreboard.normal", 10, h / 2 - 12, Color( 220,220,220 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 
-				local votes = brawl.vote.maps[ name ].votes
+				local votes = brawl.vote.data[ id ].votes
 				if votes ~= 0 then
 					draw.RoundedBox( 4, w-28, 7, 21, 21, Color( 220,220,220 ) )
 					draw.SimpleText( votes, "brawl.hud.scoreboard.normal", w-18, 18, Color( 0,0,0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -132,18 +91,17 @@ net.Receive( "brawl.vote.start", function( len )
 
 			but.DoClick = function( self )
 				net.Start( "brawl.vote.update" )
-					net.WriteBool( false )
-					net.WriteString( name )
+					net.WriteUInt( id, 8 )
 				net.SendToServer()
 			end
 
 			k = k + 1
 		end
 
-		maplist:SetSize( 300, k * 40 + 55 )
-		maplist:SetPos( 300, 0 )
+		maplist:SetSize( 300, k * 65 + 55 )
+		maplist:SetPos( 0, 0 )
 
-		container:SetSize( 600, k * 40 + 55 )
+		container:SetSize( 300, k * 65 + 55 )
 		container:Center()
 	end)
 
@@ -158,25 +116,20 @@ end)
 
 net.Receive( "brawl.vote.update", function( len )
 
-	local isMode = net.ReadBool()
 	local data = net.ReadTable()
-
-	if isMode then
-		for mode, votes in pairs( data ) do
-			brawl.vote.modes[ mode ].votes = votes
-		end
-	else
-		for map, votes in pairs( data ) do
-			brawl.vote.maps[ map ].votes = votes
-		end
+	for id, votes in pairs( data ) do
+		brawl.vote.data[ id ].votes = votes
 	end
 
 end)
 
 net.Receive( "brawl.vote.finish", function( len )
 
-	local mode = net.ReadString()
 	local map = net.ReadString()
+	local mode = net.ReadString()
+
+	local mapName = brawl.config.maps[ map ].name
+	local modeName = brawl.modes.registered[ mode ].name
 
 	local container = brawl.vote.menu.container
 	container:Dock( FILL )
@@ -192,7 +145,7 @@ net.Receive( "brawl.vote.finish", function( len )
 		draw.Text( txtData )
 
 		txtData.font = "brawl.hud.normal"
-		txtData.text = mode .. " on " .. map
+		txtData.text = modeName .. " on " .. mapName
 		txtData.pos = { w / 2, h / 2 + 20 }
 		txtData.color = Color( 255,255,255 )
 		draw.Text( txtData )
