@@ -97,7 +97,11 @@ function brawl.spawn.findNearestTeam( ply )
 	local plys = {}
 	for k, pl in pairs( player.GetAll() ) do
 		if pl == ply or pl:Team() ~= tID or not pl:Alive() or pl:GetNWBool("Spectating") then continue end
-		table.insert( plys, pl:GetPos() )
+		if pl.lastHit and CurTime() < pl.lastHit + 15 then continue end
+
+		local dir = pl:GetAimVector()
+		dir.z = -0.1
+		table.insert( plys, pl:GetPos() - dir:GetNormalized() * 50 )
 	end
 
 	for k, pos in RandomPairs( plys ) do

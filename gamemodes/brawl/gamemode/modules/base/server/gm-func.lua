@@ -120,7 +120,7 @@ function GM:EntityTakeDamage( ent, dmg )
 		net.Start( "brawl.hit" )
 			net.WriteTable({
 				victim = ent,
-				attacker = dmg:GetAttacker(),
+				attacker = attacker,
 				inflictor = dmg:GetInflictor(),
 				damage = damage,
 				pos = dmg:GetDamagePosition(),
@@ -139,13 +139,14 @@ function GM:EntityTakeDamage( ent, dmg )
 	end
 
 	if not ent.attacks then ent.attacks = {} end
-	if IsValid( dmg:GetAttacker() ) then
-		ent.attacks[ dmg:GetAttacker() ] = ent.attacks[ dmg:GetAttacker() ] or {}
-		local data = ent.attacks[ dmg:GetAttacker() ]
+	if IsValid( attacker ) then
+		ent.attacks[ attacker ] = ent.attacks[ attacker ] or {}
+		local data = ent.attacks[ attacker ]
 		data.lastHit = CurTime()
 		data.dmg = data.dmg and (data.dmg + damage) or damage
 	end
 
+	if IsValid(attacker) and attacker:IsPlayer() and attacker ~= ent then ent.lastHit = CurTime() end
 	dmg:SetDamage( 0 )
 
 end
