@@ -740,9 +740,7 @@ function brawl.hud.drawNotifications()
 			draw.RoundedBox( 5, offset + 10, 70 + curY, w + 20, h + 20, col )
 			draw.RoundedBox( 4, offset + 11, 71 + curY, w + 18, h + 20 - 2, Color( 0,0,0, 200 * al ) )
 
-			surface.SetAlphaMultiplier( al )
-			v.text:Draw( offset + 20, 80 + curY, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-			surface.SetAlphaMultiplier( 1 )
+			v.text:Draw( offset + 20, 80 + curY, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 255 * al )
 
 			curY = curY + (h + 25) * al
 		end
