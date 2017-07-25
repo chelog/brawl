@@ -49,79 +49,87 @@ net.Receive( "brawl.vote.start", function( len )
 		end
 	end
 
+	menu.container = vgui.Create( "DPanel", menu )
+	local container = menu.container
+	container.Paint = function( self, w, h )
+		draw.Text({
+			font = "brawl.hud.normal",
+			text = "Next map",
+			pos = { w / 2, 40 },
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_BOTTOM,
+			color = Color( 220,220,220 )
+		})
+	end
+
+	local img = vgui.Create( "DHTML", container )
+	img:SetSize( 810, 542 )
+	img:SetPos( 0, 0 )
+
+	local k, thumbs = 0, {}
+	for id, data in SortedPairs( brawl.vote.data ) do
+		local x, y = 10 + (k < 4 and k or k-3) * 266, 10 + (k < 4 and 0 or 1) * 266
+
+		local url = brawl.config.maps[ data.map ].img
+		local but = vgui.Create( "DButton", container )
+		but:SetSize( 256, 256 )
+		but:SetPos( x, y )
+		but:SetText( "" )
+		but.Paint = function( self, w, h )
+			local mapName = brawl.config.maps[ data.map ].name
+			local modeName = brawl.modes.registered[ data.mode ].name
+
+			draw.RoundedBox( 0, 0, 0, w, h, self:IsHovered() and Color( 150,150,150, 30 ) or Color( 100,100,100, 30 ) )
+			draw.RoundedBox( 0, 1, 1, w-2, h-2, Color( 0,0,0, 150 ) )
+
+			draw.SimpleText( modeName, "brawl.hud.scoreboard.normal", w - 10, h - 15, Color( 220,220,220 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( mapName, "brawl.hud.scoreboard.large", w - 10, h - 37, Color( 220,220,220 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+
+			local votes = brawl.vote.data[ id ].votes
+			if votes ~= 0 then
+				draw.RoundedBox( 4, 7, 7, 21, 21, Color( 220,220,220 ) )
+				draw.SimpleText( votes, "brawl.hud.scoreboard.normal", 18, 18, Color( 0,0,0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			end
+		end
+
+		but.DoClick = function( self )
+			net.Start( "brawl.vote.update" )
+				net.WriteUInt( id, 8 )
+			net.SendToServer()
+		end
+
+		table.insert( thumbs, "<div class='thumb' style='background-image: url(" .. url .. ")'></div>")
+
+		k = k + 1
+	end
+
+
+	local html = string.format([[<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	.thumb {
+		float: left;
+		margin: 10px 0 0 10px;
+		background-size: auto 100%%;
+		background-position: center;
+		width: 256px;
+		height: 256px;
+	}
+	</style>
+	<body>%s</body>]], table.concat( thumbs, "" ))
+	img:SetHTML(html)
+
+	container:SetSize( 810, 542 )
+	container:Center()
+	container:SetVisible( false )
+	function container:PerformLayout( w, h )
+		self:Center()
+	end
+
 	timer.Simple( 2, function()
-		menu.container = vgui.Create( "DPanel", menu )
-		local container = menu.container
-		container:SetPaintBackground( false )
-
-		-- maps
-		local maplist = vgui.Create( "DPanel", container )
-		maplist.Paint = function( self, w, h )
-			draw.Text({
-				font = "brawl.hud.normal",
-				text = "Next map",
-				pos = { w / 2, 40 },
-				xalign = TEXT_ALIGN_CENTER,
-				yalign = TEXT_ALIGN_BOTTOM,
-				color = Color( 220,220,220 )
-			})
-		end
-
-		local k = 0
-		for id, data in SortedPairs( brawl.vote.data ) do
-			local x, y = 10 + (k % 3) * 266, 10 + (k % 2) * 266
-
-			local url = brawl.config.maps[ data.map ].img
-			local img = vgui.Create( "DHTML", maplist )
-			img:SetSize( 256, 256 )
-			img:SetPos( x, y )
-			img:SetHTML([[<style>
-				body {
-					background-image: url(]] .. url .. [[);
-					background-size: auto 100%;
-					background-position: center;
-					border-radius: 4px;
-				}
-			</style>
-			<body></body>]])
-
-			local but = vgui.Create( "DButton", img )
-			but:SetSize( 256, 256 )
-			but:SetPos( 0, 0 )
-			but:SetText( "" )
-			but.Paint = function( self, w, h )
-				local mapName = brawl.config.maps[ data.map ].name
-				local modeName = brawl.modes.registered[ data.mode ].name
-
-				draw.RoundedBox( 0, 0, 0, w, h, self:IsHovered() and Color( 150,150,150, 30 ) or Color( 100,100,100, 30 ) )
-				draw.RoundedBox( 0, 1, 1, w-2, h-2, Color( 0,0,0, 150 ) )
-				-- surface.SetDrawColor( 255,255,255, 50 )
-				-- surface.DrawOutlinedRect( 0, 0, 256, 256 )
-
-				draw.SimpleText( modeName, "brawl.hud.scoreboard.normal", w - 10, h - 15, Color( 220,220,220 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-				draw.SimpleText( mapName, "brawl.hud.scoreboard.large", w - 10, h - 37, Color( 220,220,220 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-
-				local votes = brawl.vote.data[ id ].votes
-				if votes ~= 0 then
-					draw.RoundedBox( 4, 7, 7, 21, 21, Color( 220,220,220 ) )
-					draw.SimpleText( votes, "brawl.hud.scoreboard.normal", 18, 18, Color( 0,0,0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-				end
-			end
-
-			but.DoClick = function( self )
-				net.Start( "brawl.vote.update" )
-					net.WriteUInt( id, 8 )
-				net.SendToServer()
-			end
-
-			k = k + 1
-		end
-
-		maplist:SetSize( 266 * 3 + 10, 266 * 2 + 10 )
-		maplist:SetPos( 0, 0 )
-
-		container:SetSize( 266 * 3 + 10, 266 * 2 + 10 )
-		container:Center()
+		menu.container:SetVisible( true )
 	end)
 
 	surface.PlaySound( "brawl/vote-map.ogg" )
