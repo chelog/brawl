@@ -24,6 +24,13 @@ function meta:SelectWeapon( class )
 
 end
 
+net.Receive( "brawl.selectWeapon", function()
+
+	local class = net.ReadString()
+	LocalPlayer():SelectWeapon( class )
+
+end)
+
 hook.Add( "CreateMove", "WeaponSwitch", function( cmd )
 
 	if not IsValid( LocalPlayer().DoWeaponSwitch ) then return end

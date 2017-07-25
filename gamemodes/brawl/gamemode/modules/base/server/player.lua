@@ -6,6 +6,14 @@ function meta:LoadWeapons()
 
 end
 
+function meta:SelectWeapon( class )
+
+	net.Start( "brawl.selectWeapon" )
+		net.WriteString( class )
+	net.Send( self )
+
+end
+
 function meta:AddAmmoClips( wep, num, secondary )
 
 	brawl.AddWeaponClips( self, wep, num, secondary )
