@@ -14,6 +14,20 @@ function meta:SelectWeapon( class )
 
 end
 
+function meta:GiveWeapon( class, clips )
+
+	local cat = brawl.GetWeaponCategory( class )
+	if not cat then return end
+
+	local wep = self:Give( class )
+	wep:SetNWString( "WeaponCategory", cat )
+
+	if clips then self:AddAmmoClips( wep, clips ) end
+
+	return wep
+
+end
+
 function meta:AddAmmoClips( wep, num, secondary )
 
 	brawl.AddWeaponClips( self, wep, num, secondary )

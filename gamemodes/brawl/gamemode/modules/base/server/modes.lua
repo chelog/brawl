@@ -123,24 +123,18 @@ function brawl.PlayerLoadWeapons( ply )
 
 		local melee = table.Random( brawl.config.weapons.melee )
 		local secondary = table.Random( brawl.config.weapons.secondary )
-		local extra = table.Random( brawl.config.weapons.extra )
 
-		local mWep = ply:Give( melee )
-		mWep:SetNWString( "WeaponCategory", "melee" )
-		local sWep = ply:Give( secondary )
-		sWep:SetNWString( "WeaponCategory", "secondary" )
-		ply:AddAmmoClips( secondary, 2 )
+		ply:GiveWeapon( melee )
+		ply:GiveWeapon( secondary, 2 )
 		if math.random( 4 ) == 1 then
-			local eWep = ply:Give( extra )
-			eWep:SetNWString( "WeaponCategory", "extra" )
+			local extra = table.Random( brawl.config.weapons.extra )
+			ply:GiveWeapon( extra )
 		end
 
 		local cat = GetGlobalString("brawl.mode.category")
 		if cat ~= "none" then
 			local primary = table.Random( brawl.config.weapons.primary[ cat ] )
-			local pWep = ply:Give( primary )
-			pWep:SetNWString( "WeaponCategory", "primary" )
-			ply:AddAmmoClips( primary, 2 )
+			ply:GiveWeapon( primary, 2 )
 			ply:SelectWeaponByCategory( "primary" )
 		else
 			ply:SelectWeaponByCategory( "secondary" )
