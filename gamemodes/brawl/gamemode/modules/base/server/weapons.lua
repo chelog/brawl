@@ -56,6 +56,5 @@ end)
 
 net.Receive( "brawl.dropWeapon", function( len, ply )
 	local cat = net.ReadString()
-	print("brawl.dropWeapon received")
 	ply:DropWeapon( ply:GetWeaponByCategory( cat ))
 end)

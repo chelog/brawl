@@ -191,7 +191,6 @@ local function dropSelectedWeapon()
 		net.Start( "brawl.dropWeapon" )
 		net.WriteString( cat )
 		net.SendToServer()
-		print("brawl.dropWeapon sended")
 		--LocalPlayer():DropWeapon( LocalPlayer():GetWeaponByCategory( cat ))
 	end
 end
