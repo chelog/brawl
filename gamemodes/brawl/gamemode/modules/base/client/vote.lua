@@ -63,12 +63,12 @@ net.Receive( "brawl.vote.start", function( len )
 	end
 
 	local img = vgui.Create( "DHTML", container )
-	img:SetSize( 810, 542 )
-	img:SetPos( 0, 0 )
+	img:SetSize( 815, 542 )
+	img:SetPos( 0, 60 )
 
 	local k, thumbs = 0, {}
 	for id, data in SortedPairs( brawl.vote.data ) do
-		local x, y = 10 + (k < 4 and k or k-3) * 266, 10 + (k < 4 and 0 or 1) * 266
+		local x, y = 10 + (k < 3 and k or k-3) * 266, 70 + (k < 3 and 0 or 1) * 266
 
 		local url = brawl.config.maps[ data.map ].img
 		local but = vgui.Create( "DButton", container )
@@ -121,7 +121,7 @@ net.Receive( "brawl.vote.start", function( len )
 	<body>%s</body>]], table.concat( thumbs, "" ))
 	img:SetHTML(html)
 
-	container:SetSize( 810, 542 )
+	container:SetSize( 815, 602 )
 	container:Center()
 	container:SetVisible( false )
 	function container:PerformLayout( w, h )

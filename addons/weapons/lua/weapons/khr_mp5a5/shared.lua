@@ -18,7 +18,7 @@ if CLIENT then
 	
 	SWEP.MuzzleEffect = "muzzleflash_suppressed"
 	SWEP.PosBasedMuz = false
-	SWEP.SightWithRail = true
+	SWEP.SightWithRail = true 
 	
 	SWEP.Shell = "smallshell"
 	SWEP.ShellScale = .2
@@ -73,7 +73,7 @@ if CLIENT then
 		["md_rugersup"] = { type = "Model", model = "models/cw2/attachments/9mmsuppressor.mdl", bone = "Mp5 Body", rel = "", pos = Vector(0, -15.065, 0.442), angle = Angle(0, 0, -1.17), size = Vector(0.699, 0.885, 0.699), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
 		["md_fas2_aimpoint"] = { type = "Model", model = "models/c_fas2_aimpoint.mdl", bone = "Mp5 Body", rel = "", pos = Vector(0, -3.201, 2.43), angle = Angle(0, 90, 0), size = Vector(0.8, 0.8, 0.8), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
 		["md_microt1kh"] = { type = "Model", model = "models/cw2/attachments/microt1.mdl", bone = "Mp5 Body", rel = "", pos = Vector(-0.015, -0.92, 3.079), angle = Angle(0, 0, 0), size = Vector(0.3, 0.3, 0.3), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["md_rail"] = { type = "Model", model = "models/cw2 rails/mp5_rail.mdl", bone = "Mp5 Body", rel = "", pos = Vector(-2.06, -17.143, -4.7), angle = Angle(0, -90, 0), size = Vector(0.8, 0.8, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+		["md_rail"] = { type = "Model", model = "models/wystan/attachments/rail.mdl", bone = "Mp5 Body", rel = "", pos = Vector(-0.2, -2.55, 1.1), angle = Angle(0, -90, 0), size = Vector(0.8, 0.8, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
 		["md_fas2_eotech"] = { type = "Model", model = "models/c_fas2_eotech.mdl", bone = "Mp5 Body", rel = "", pos = Vector(0, -3.62, 2.558), angle = Angle(0, 90, 0), size = Vector(0.899, 0.899, 0.899), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
 		["odec3d_cmore_kry"] = { type = "Model", model = "models/weapons/krycek/sights/odec3d_cmore_reddot.mdl", bone = "Mp5 Body", rel = "", pos = Vector(0.059, -1.158, 3), angle = Angle(0, 90, 0), size = Vector(0.2, 0.2, 0.2), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
 		["md_foregrip"] = { type = "Model", model = "models/wystan/attachments/foregrip1.mdl", bone = "Mp5 Body", rel = "", pos = Vector(-0.301, -15.065, -0.7), angle = Angle(0, 0, 0), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
