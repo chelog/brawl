@@ -87,8 +87,7 @@ net.Receive( "brawl.vote.start", function( len )
 
 			local votes = brawl.vote.data[ id ].votes
 			if votes ~= 0 then
-				draw.RoundedBox( 4, 7, 7, 21, 21, Color( 220,220,220 ) )
-				draw.SimpleText( votes, "brawl.hud.scoreboard.normal", 18, 18, Color( 0,0,0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( votes, "brawl.vote.voteCount", w/2, h/2, Color( 255,255,255, 25 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
 		end
 

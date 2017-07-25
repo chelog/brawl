@@ -54,6 +54,17 @@ surface.CreateFont( "brawl.hud.scoreboard.normal", {
 	extended = true,
 })
 
+-- VOTE
+
+surface.CreateFont( "brawl.vote.voteCount", {
+	font = "Roboto",
+	size = 150,
+	weight = 500,
+	blursize = 0,
+	antialias = true,
+	extended = true,
+})
+
 -- MENU
 
 surface.CreateFont( "brawl.menu.large", {
