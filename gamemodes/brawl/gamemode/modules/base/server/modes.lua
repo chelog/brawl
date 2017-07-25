@@ -116,6 +116,43 @@ function brawl.NewRound()
 
 end
 
+function brawl.PlayerLoadWeapons( ply )
+
+	if not brawl.modes.active.PlayerLoadWeapons then
+		ply:StripWeapons()
+
+		local melee = table.Random( brawl.config.weapons.melee )
+		local secondary = table.Random( brawl.config.weapons.secondary )
+		local extra = table.Random( brawl.config.weapons.extra )
+
+		local mWep = ply:Give( melee )
+		mWep:SetNWString( "WeaponCategory", "melee" )
+		local sWep = ply:Give( secondary )
+		sWep:SetNWString( "WeaponCategory", "secondary" )
+		ply:AddAmmoClips( secondary, 2 )
+		if math.random( 4 ) == 1 then
+			local eWep = ply:Give( extra )
+			eWep:SetNWString( "WeaponCategory", "extra" )
+		end
+
+		local cat = GetGlobalString("brawl.mode.category")
+		if cat ~= "none" then
+			local primary = table.Random( brawl.config.weapons.primary[ cat ] )
+			local pWep = ply:Give( primary )
+			pWep:SetNWString( "WeaponCategory", "primary" )
+			ply:AddAmmoClips( primary, 2 )
+			ply:SelectWeaponByCategory( "primary" )
+		else
+			ply:SelectWeaponByCategory( "secondary" )
+		end
+
+		return true
+	end
+
+	return brawl.modes.active.PlayerLoadWeapons( ply )
+
+end
+
 function brawl.PlayerCanSpectate( ply, ent )
 
 	if not brawl.modes.active.PlayerCanSpectate then

@@ -2,36 +2,7 @@ local meta = FindMetaTable "Player"
 
 function meta:LoadWeapons()
 
-	self:StripWeapons()
-
-	local melee = table.Random( brawl.config.weapons.melee )
-	local secondary = table.Random( brawl.config.weapons.secondary )
-	local extra = table.Random( brawl.config.weapons.extra )
-
-	local mWep = self:Give( melee )
-	mWep:SetNWString( "WeaponCategory", "melee" )
-	local sWep = self:Give( secondary )
-	sWep:SetNWString( "WeaponCategory", "secondary" )
-	self:AddAmmoClips( secondary, 2 )
-	if math.random( 4 ) == 1 then
-		local eWep = self:Give( extra )
-		eWep:SetNWString( "WeaponCategory", "extra" )
-	end
-
-	local cat = GetGlobalString("brawl.mode.category")
-	if cat ~= "none" then
-		local primary = table.Random( brawl.config.weapons.primary[ cat ] )
-		local pWep = self:Give( primary )
-		pWep:SetNWString( "WeaponCategory", "primary" )
-		self:AddAmmoClips( primary, 2 )
-		timer.Simple( 0, function()
-			self:SelectWeapon( primary )
-		end)
-	else
-		timer.Simple( 0, function()
-			self:SelectWeapon( secondary )
-		end)
-	end
+	brawl.PlayerLoadWeapons( self )
 
 end
 
