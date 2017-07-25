@@ -400,6 +400,7 @@ function brawl.hud.drawAmmo( ply )
 		ammoAl = math.Approach( ammoAl, fadeOut and 0 or 1, (fadeOut and 1 or 4) * FrameTime() )
 
 		local x1, w1 = ScrW() - math.min( maxClip1, 41 ) * 7 - 28, math.min( maxClip1, 41 ) * 7 + 5
+		local x2 = x1 + 1
 		if clip1 > maxClip1 and clip1 <= 41 then
 			w1 = w1 + 9
 			x1 = x1 - 9
@@ -407,7 +408,7 @@ function brawl.hud.drawAmmo( ply )
 
 		if maxClip1 <= 40 then
 			draw.RoundedBox( 5, x1, ScrH() - 44, w1, 28, Color( 100,100,100, 50 * ammoAl ) )
-			draw.RoundedBox( 4, x1 + 1, ScrH() - 43, math.min( maxClip1, 41 ) * 7 + 3, 26, Color( 0,0,0, 200 * ammoAl ) )
+			draw.RoundedBox( 4, x2, ScrH() - 43, math.min( maxClip1, 41 ) * 7 + 3, 26, Color( 0,0,0, 200 * ammoAl ) )
 		else
 			x1 = ScrW() - 41 * 7 - 15
 			draw.RoundedBoxEx( 5, x1, ScrH() - 44, 41 * 7 - 7, 28, Color( 100,100,100, 50 * ammoAl ), false, true, false, true )
