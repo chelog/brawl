@@ -209,6 +209,8 @@ end)
 
 concommand.Add( "+menu", function()
 
+	if not LocalPlayer():Alive() then return end
+
 	brawl.weaponDrawer.active = true
 	brawl.weaponDrawer.holding = true
 	brawl.weaponDrawer.closeTime = nil
