@@ -399,25 +399,37 @@ function brawl.hud.drawAmmo( ply )
 		local fadeOut = (CurTime() - lastChange > 2) and (clip1 >= maxClip1)
 		ammoAl = math.Approach( ammoAl, fadeOut and 0 or 1, (fadeOut and 1 or 4) * FrameTime() )
 
-		local x1, w1 = ScrW() - maxClip1 * 7 - 28, maxClip1 * 7 + 5
-		if clip1 > maxClip1 then
+		local x1, w1 = ScrW() - math.min( maxClip1, 41 ) * 7 - 28, math.min( maxClip1, 41 ) * 7 + 5
+		if clip1 > maxClip1 and clip1 <= 41 then
 			w1 = w1 + 9
 			x1 = x1 - 9
 		end
 
-		draw.RoundedBox( 5, x1, ScrH() - 44, w1, 28, Color( 100,100,100, 50 * ammoAl ) )
-		draw.RoundedBox( 4, ScrW() - maxClip1 * 7 - 27, ScrH() - 43, maxClip1 * 7 + 3, 26, Color( 0,0,0, 200 * ammoAl ) )
+		if maxClip1 <= 40 then
+			draw.RoundedBox( 5, x1, ScrH() - 44, w1, 28, Color( 100,100,100, 50 * ammoAl ) )
+			draw.RoundedBox( 4, x1 + 1, ScrH() - 43, math.min( maxClip1, 41 ) * 7 + 3, 26, Color( 0,0,0, 200 * ammoAl ) )
+		else
+			x1 = ScrW() - 41 * 7 - 15
+			draw.RoundedBoxEx( 5, x1, ScrH() - 44, 41 * 7 - 7, 28, Color( 100,100,100, 50 * ammoAl ), false, true, false, true )
+			draw.RoundedBoxEx( 4, x1, ScrH() - 43, 41 * 7 - 8, 26, Color( 0,0,0, 200 * ammoAl ), false, true, false, true )
+			for i = 1,10 do
+				draw.RoundedBox( 0, x1 - i, ScrH() - 44, 1, 28, Color( 100,100,100, 50 * (ammoAl - i / 10) ) )
+				draw.RoundedBox( 0, x1 - i, ScrH() - 43, 1, 26, Color( 0,0,0, 200 * (ammoAl - i / 10) ) )
+			end
+		end
 
 		surface.SetDrawColor( 255,255,255, 150 * ammoAl )
 		draw.NoTexture()
 		local x2
-		for i = 1, clip1 do
+		for i = 1, math.min( clip1, 41 ) do
 			if clip1 > maxClip1 and i == clip1 then
 				x2 = ScrW() - (7 * i) - 23
 			else
 				x2 = ScrW() - (7 * i) - 20
 			end
 
+			if i == 41 then surface.SetDrawColor( 255,255,255, 10 * ammoAl ) end
+			if i == 40 then surface.SetDrawColor( 255,255,255, 35 * ammoAl ) end
 			surface.DrawPoly({
 				{ x = x2 - 2, y = ScrH() - 40 },
 				{ x = x2, y = ScrH() - 30 },
