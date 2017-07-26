@@ -53,82 +53,82 @@ brawl.config.maps = {
 	dm_basebunker = {
 		name = "Base Bunker", workshop = "812797510",
 		img = "http://images.akamai.steamusercontent.com/ugc/105103266291569905/B36E449E2CEEA7806542A3C1741399681DB606F3/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	ahl2_fishdock = {
 		name = "Fish Docks", workshop = "914554901",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/817810804115581770/224BB5D5C35C8B2D72DEB408C10E834014D1221B/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_island18_night = {
 		name = "Island 18", workshop = "284612894",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/577901446709652492/0E3F2454B9E1AE67A8CCC22F284B1183F02DF155/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_montana = {
 		name = "Montana", workshop = "563904685",
 		img = "http://images.akamai.steamusercontent.com/ugc/392173784278456259/464BBA8D0D4F766BE829F60D291458D993FADE54/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_torque = {
 		name = "Torque", workshop = "442990905",
 		img = "http://images.akamai.steamusercontent.com/ugc/544152440190283835/F6E77E18AD0A573938CD33380B427DE2C3811C2D/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	ttt_rooftops_2016_v1 = {
 		name = "Rooftops", workshop = "534491717",
 		img = "http://images.akamai.steamusercontent.com/ugc/574565056146367881/1954061909AB6D49DD91E8704150FA3942A27C7E/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	de_desert_atrocity_v3 = {
 		name = "Atrocity", workshop = "242494243",
 		img = "http://images.akamai.steamusercontent.com/ugc/3300317637498361777/12D826D67E9592CC37D866016FEE13B4087625E5/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	de_forest = {
 		name = "Forest", workshop = "106821161",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/920118814791669595/29413F17721E7E2750D3C0F9A8F26CFEC9230B10/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	-- rp_eastcoast_v4b = {
 	-- 	name = "Dobrograd", workshop = "817430636",
 	-- 	img = "http://images.akamai.steamusercontent.com/ugc/99473989861329244/B313069CC86B7E7E2E651BCB8F34A987C05BAE51/",
-	-- 	modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+	-- 	modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	-- },
 	dm_streetwar_b1 = {
 		name = "Streetwar", workshop = "446039435",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/540775374405727353/1982CA9E54A819E09EB2DFCFAD6C679D12BA8E62/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_drift = {
 		name = "Drift", workshop = "837801728",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/98351028244622841/63D32956715BFAFC440D13D9E942739DC05BFB33/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_railyard = {
 		name = "Railyard", workshop = "128029375",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/1117161388864327502/CD43A240D52A5B1120FF5370A85C45C3AC949B08/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	ahl2_snowmax = {
 		name = "SnowMax", workshop = "914563424",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/817810804115660796/92935CAF7ABC9E2EE5B744E2B8B7D236DF6CFEFB/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_mines = {
 		name = "Mines", workshop = "660390276",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/456361914572272301/38F42B71F3FBA53B1BAC646501887E75B4DDB151/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_global = {
 		name = "Global", workshop = "446155220",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/540775374406305801/EB8B7298F7C7DE35324B63C881457C8301A6AD28/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 	dm_construction = {
 		name = "Construction", workshop = "863985236",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/89347071775451938/FDCE7BC93A97DC65461B6162486C8513A0D0D38E/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el" },
+		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
 }
 
