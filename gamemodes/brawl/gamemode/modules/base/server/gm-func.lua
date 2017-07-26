@@ -64,8 +64,8 @@ end
 
 function GM:DoPlayerDeath( victim, attacker, dmg )
 
-	brawl.DoPlayerDeath( victim, attacker, dmg )
 	victim:DoPlayerDeath( attacker, dmg )
+	brawl.DoPlayerDeath( victim, attacker, dmg )
 
 end
 
@@ -160,7 +160,10 @@ end
 
 function GM:PlayerCanPickupWeapon( ply, wep )
 
-	if not ply:CanPickupWeapon( wep ) then return end
+	if brawl.modes.active.PlayerCanPickupWeapon then
+		return brawl.modes.active.PlayerCanPickupWeapon( ply, wep )
+	end
+
 	return true
 
 end

@@ -202,12 +202,6 @@ function meta:DoPlayerDeath( attacker, dmg )
 
 end
 
-function meta:CanPickupWeapon( wep )
-
-	return true
-
-end
-
 function meta:DropWeapon( wep )
 
 	if isstring( wep ) then
