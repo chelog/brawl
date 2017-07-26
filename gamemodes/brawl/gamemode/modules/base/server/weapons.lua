@@ -28,20 +28,3 @@ net.Receive( "brawl.dropWeapon", function( len, ply )
 	ply:DropWeapon( ply:GetWeaponByCategory( cat ))
 
 end)
-
-net.Receive( "brawl.invalidWeapons", function( len, ply )
-
-	brawl.msg( "%s has invalid weapons, fixing it up", ply:Name() )
-
-	for k, wep in pairs( ply:GetWeapons() ) do
-		if wep.noCategory then continue end
-
-		local cat = wep:GetWeaponCategory()
-		if cat then
-			wep:SetNWString( "WeaponCategory", cat )
-		else
-			ply:StripWeapon( wep:GetClass() )
-		end
-	end
-
-end)
