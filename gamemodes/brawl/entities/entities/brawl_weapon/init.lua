@@ -48,6 +48,8 @@ function ENT:Use( ply, caller )
 
 	local newclass = self:GetNWString( "WeaponClass" )
 	local newcat = self:GetNWString( "WeaponCategory" )
+	if not GAMEMODE:PlayerCanPickupWeaponClass( newclass ) then return end
+
 	if not ply:HasWeapon( newclass ) then
 		for k, wep in pairs( ply:GetWeapons() ) do
 			local oldcat = wep:GetNWString( "WeaponCategory" )

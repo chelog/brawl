@@ -168,6 +168,16 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 
 end
 
+function GM:PlayerCanPickupWeaponClass( ply, class )
+
+	if brawl.modes.active.PlayerCanPickupWeaponClass then
+		return brawl.modes.active.PlayerCanPickupWeaponClass( ply, class )
+	end
+
+	return true
+
+end
+
 function GM:PlayerDeathThink( ply )
 
 	brawl.DeathThink( ply )
