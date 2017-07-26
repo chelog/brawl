@@ -48,7 +48,7 @@ function GM:PlayerInitialSpawn( ply )
 
 end
 
-function GM:PlayerSpawn ( ply )
+function GM:PlayerSpawn( ply )
 
 	if not IsValid(ply) then return end
 
@@ -56,6 +56,7 @@ function GM:PlayerSpawn ( ply )
 
 	ply.BabyGod = true
 	timer.Simple( 3, function()
+		if not IsValid(ply) then return end
 		ply.BabyGod = false
 	end)
 
