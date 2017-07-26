@@ -36,7 +36,15 @@ end
 function meta:GetWeaponByCategory( cat )
 
 	for k, wep in pairs( self:GetWeapons() ) do
-		if wep:GetNWString( "WeaponCategory" ) == cat then
+		if wep.noCategory then continue end
+
+		local curCat = wep:GetNWString( "WeaponCategory" )
+		if not curCat or curCat == "" then
+			brawl.msg( "Fixing category for %s", wep:GetClass() )
+			wep:SetNWString( "WeaponCategory", wep:GetWeaponCategory() )
+		end
+
+		if curCat == cat then
 			return wep
 		end
 	end

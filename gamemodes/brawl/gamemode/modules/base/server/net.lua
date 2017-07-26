@@ -19,5 +19,4 @@ util.AddNetworkString "brawl.exp.levelUp"
 util.AddNetworkString "brawl.myModel"
 
 util.AddNetworkString "brawl.dropWeapon"
-
 util.AddNetworkString "brawl.selectWeapon"
