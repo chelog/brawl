@@ -5,7 +5,7 @@ GM.Author = "chelog"
 GM.Email = "chelog@octothorp.team"
 GM.Website = "http://www.octothorp.team"
 
-brawl.version = "0.13"
+brawl.version = "0.14"
 
 include "lib/misc.lua"
 
