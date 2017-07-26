@@ -25,6 +25,9 @@ end)
 net.Receive( "brawl.dropWeapon", function( len, ply )
 
 	local cat = net.ReadString()
-	ply:DropWeapon( ply:GetWeaponByCategory( cat ))
+	local wep = ply:GetWeaponByCategory( cat )
+
+	if not GAMEMODE:PlayerCanDropWeapon( ply, wep ) then return end
+	ply:DropWeapon()
 
 end)
