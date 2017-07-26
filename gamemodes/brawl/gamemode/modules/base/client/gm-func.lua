@@ -27,7 +27,15 @@ end
 net.Receive( "brawl.selectWeapon", function()
 
 	local class = net.ReadString()
-	LocalPlayer():SelectWeapon( class )
+
+	local function doIt()
+		if LocalPlayer and LocalPlayer().SelectWeapon then
+			LocalPlayer():SelectWeapon( class )
+		else
+			timer.Simple( 0.5, doIt )
+		end
+	end
+	doIt()
 
 end)
 
