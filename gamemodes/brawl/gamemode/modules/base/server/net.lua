@@ -6,10 +6,7 @@ util.AddNetworkString "brawl.vote.start"
 util.AddNetworkString "brawl.vote.update"
 util.AddNetworkString "brawl.vote.finish"
 
-util.AddNetworkString "brawl.spawn"
-util.AddNetworkString "brawl.spawn.get"
-util.AddNetworkString "brawl.spawn.add"
-util.AddNetworkString "brawl.spawn.remove"
+util.AddNetworkString "brawl.spawn.send"
 
 util.AddNetworkString "brawl.endRound"
 

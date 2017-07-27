@@ -21,44 +21,9 @@ hook.Add( "HUDPaint", "brawl.spawn", function()
 
 end)
 
-concommand.Add( "brawl_spawn_add",function( ply, cmd, args, argStr )
-
-	if not IsValid( LocalPlayer() ) then return end
-
-	local pos = LocalPlayer():GetEyeTrace().HitPos
-	local ang = LocalPlayer():EyeAngles()
-	ang.p, ang.r = 0, 0
-
-	net.Start( "brawl.spawn.add" )
-		net.WriteTable({
-			pos = pos,
-			ang = ang
-		})
-	net.SendToServer()
-
-end)
-
-concommand.Add( "brawl_spawn_remove",function( ply, cmd, args, argStr )
-
-	local id = tonumber( args[1] )
-	if not id then return end
-
-	net.Start( "brawl.spawn.remove" )
-		net.WriteInt( id, 8 )
-	net.SendToServer()
-
-end)
-
-net.Receive( "brawl.spawn", function( len )
+net.Receive( "brawl.spawn.send", function( len )
 
 	local data = net.ReadTable()
 	brawl.spawns = data
-
-end)
-
-hook.Add( "Initialize", "brawl.spawn.get", function()
-
-	net.Start( "brawl.spawn.get" )
-	net.SendToServer()
 
 end)

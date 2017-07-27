@@ -199,34 +199,44 @@ function brawl.spawn.isAllowed( ply )
 
 end
 
-net.Receive( "brawl.spawn.add", function( len, ply )
+concommand.Add( "brawl_spawn_add",function( ply, cmd, args, argStr )
 
 	if not brawl.spawn.isAllowed( ply ) then return end
 
-	local t = net.ReadTable()
-	brawl.spawn.add( t )
+	local pos = ply:GetEyeTrace().HitPos
+	local ang = ply:EyeAngles()
+	ang.p, ang.r = 0, 0
 
-end)
+	brawl.spawn.add({
+		pos = pos,
+		ang = ang
+	})
 
-net.Receive( "brawl.spawn.remove", function( len, ply )
+end, nil, nil, FCVAR_REPLICATED)
+
+concommand.Add( "brawl_spawn_remove",function( ply, cmd, args, argStr )
 
 	if not brawl.spawn.isAllowed( ply ) then return end
 
-	local id = net.ReadInt( 8 )
+	local id = tonumber( args[1] )
+	if not id then return end
+
 	brawl.spawn.remove( id )
 
-end)
+end, nil, nil, FCVAR_REPLICATED)
 
-net.Receive( "brawl.spawn.get", function( len, ply )
-
-	net.Start( "brawl.spawn" )
-		net.WriteTable( brawl.spawns )
-	net.Send( ply )
-
-end)
-
-concommand.Add( "brawl_spawn_reload", function( ply, cmd, arg, argStr)
+concommand.Add( "brawl_spawn_reload", function( ply, cmd, arg, argStr )
 
 	brawl.spawn.load()
+
+end, nil, nil, FCVAR_REPLICATED)
+
+hook.Add("PlayerInitialSpawn", "brawl.spawn.send", function( ply )
+
+	if not IsValid(ply) then return end
+
+	net.Start( "brawl.spawn.send" )
+		net.WriteTable( brawl.spawns )
+	net.Send( ply )
 
 end)
