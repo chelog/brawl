@@ -18,6 +18,7 @@ end
 
 concommand.Add( "dropweapon", function( ply, cmd, arg, argStr)
 
+	if not GAMEMODE:PlayerCanPickupWeaponClass( newclass ) then return end
 	ply:DropWeapon( ply:GetActiveWeapon() )
 
 end)
