@@ -105,8 +105,8 @@ hook.Add( "RenderScreenspaceEffects", "brawl", function()
 		surface.SetDrawColor( 255, 255, 255, dmgBlur * 255 )
 		surface.SetMaterial( blur )
 
-		for i = 1, 5 do
-			blur:SetFloat( "$blur", dmgBlur * i * 2 )
+		for i = 1, 3 do
+			blur:SetFloat( "$blur", dmgBlur * i * 3 )
 			blur:Recompute()
 
 			render.UpdateScreenEffectTexture()
@@ -121,7 +121,14 @@ end)
 hook.Add( "brawl.hit", "brawl.camera", function( data )
 
 	if data.victim == LocalPlayer() then
-		dmgBlur = dmgBlur + data.damage / 60
+		dmgBlur = dmgBlur + data.damage / 100
+
+		if LocalPlayer().lhSnd then LocalPlayer().lhSnd:Stop() end
+		local snd = CreateSound( LocalPlayer(), "brawl/low-health.ogg" )
+		snd:ChangeVolume(1)
+		snd:SetDSP(0)
+		snd:Play()
+		LocalPlayer().lhSnd = snd
 	end
 
 end)
@@ -140,12 +147,14 @@ hook.Add( "Think", "brawl.camera", function()
 
 		-- interpolate the value
 		local delta = (tgtState - curState) * FrameTime() * 4
-		curState = math.Approach( curState, tgtState, math.max( delta, 0.01 ) )
-
+		curState = math.Approach( curState, tgtState, delta )
 	end
-	
-	local delta2 = dmgBlur * FrameTime() / 3
-	dmgBlur = math.Approach( dmgBlur, 0, math.max( delta2, 0.0004 ) )
+
+	local delta2 = dmgBlur * FrameTime() / 4
+	dmgBlur = math.Approach( dmgBlur, 0, delta2 )
+	if LocalPlayer().lhSnd then
+		LocalPlayer().lhSnd:ChangeVolume( dmgBlur )
+	end
 
 end)
 
