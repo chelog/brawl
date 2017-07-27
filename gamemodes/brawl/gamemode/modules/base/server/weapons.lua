@@ -18,8 +18,9 @@ end
 
 concommand.Add( "dropweapon", function( ply, cmd, arg, argStr)
 
-	if not GAMEMODE:PlayerCanPickupWeaponClass( newclass ) then return end
-	ply:DropWeapon( ply:GetActiveWeapon() )
+	local wep = ply:GetActiveWeapon()
+	if not GAMEMODE:PlayerCanDropWeapon( ply, wep ) then return end
+	ply:DropWeapon( wep )
 
 end)
 
@@ -29,6 +30,6 @@ net.Receive( "brawl.dropWeapon", function( len, ply )
 	local wep = ply:GetWeaponByCategory( cat )
 
 	if not GAMEMODE:PlayerCanDropWeapon( ply, wep ) then return end
-	ply:DropWeapon()
+	ply:DropWeapon( wep )
 
 end)
