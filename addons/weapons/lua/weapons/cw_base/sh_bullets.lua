@@ -19,18 +19,18 @@ end
 
 function SWEP:canPenetrate(traceData, direction)
 	local dot = nil
-	
+
 	if not self.NoPenetration[traceData.MatType] then
 		dot = self:getSurfaceReflectionDotProduct(traceData, direction)
 		ent = traceData.Entity
-	
+
 		if not ent:IsNPC() and not ent:IsPlayer() then
 			if dot > 0.26 and self.CanPenetrate then
 				return true, dot
 			end
 		end
 	end
-	
+
 	return false, dot
 end
 
@@ -44,7 +44,7 @@ function SWEP:canRicochet(traceData, penetrativeRange)
 	if self.CanRicochet and not self.NoRicochet[traceData.MatType] and penetrativeRange * traceData.Fraction < penetrativeRange then
 		return true
 	end
-	
+
 	return false
 end
 
@@ -52,23 +52,23 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 	sp = GetShootPos(self.Owner)
 	local commandNumber = self.Owner:GetCurrentCommand():CommandNumber()
 	math.randomseed(commandNumber)
-	
+
 	if self.Owner:Crouching() then
 		cone = cone * 0.85
 	end
-	
+
 	Dir = (self.Owner:EyeAngles() + self.Owner:GetViewPunchAngles() + Angle(math.Rand(-cone, cone), math.Rand(-cone, cone), 0) * 25):Forward()
 	clumpSpread = clumpSpread or self.ClumpSpread
-	
+
 	CustomizableWeaponry.callbacks.processCategory(self, "adjustBulletStructure", bul)
-	
+
 	for i = 1, bullets do
 		Dir2 = Dir
-		
+
 		if clumpSpread and clumpSpread > 0 then
 			Dir2 = Dir + Vector(math.Rand(-1, 1), math.Rand(-1, 1), math.Rand(-1, 1)) * clumpSpread
 		end
-		
+
 		if not CustomizableWeaponry.callbacks.processCategory(self, "suppressDefaultBullet", sp, Dir2, commandNumber) then
 			bul.Num = 1
 			bul.Src = sp
@@ -78,34 +78,35 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 			bul.Force	= damage * 0.3
 			bul.Damage = math.Round(damage)
 			bul.Callback = self.bulletCallback
-			
-			self.Owner:FireBullets(bul)
-			
+			bul.Attacker = self.Owner
+
+			self:FireBullets(bul)
+
 			tr.start = sp
 			tr.endpos = tr.start + Dir2 * self.PenetrativeRange
 			tr.filter = self.Owner
 			tr.mask = self.NormalTraceMask
-			
+
 			trace = util.TraceLine(tr)
-				
+
 			if trace.Hit and not trace.HitSky then
 				local canPenetrate, dot = self:canPenetrate(trace, Dir2)
-				
+
 				if canPenetrate and dot > 0.26 then
 					tr.start = trace.HitPos
 					tr.endpos = tr.start + Dir2 * self.PenStr * (self.PenetrationMaterialInteraction[trace.MatType] and self.PenetrationMaterialInteraction[trace.MatType] or 1) * self.PenMod
 					tr.filter = self.Owner
 					tr.mask = self.WallTraceMask
-					
+
 					trace = util.TraceLine(tr)
-					
+
 					tr.start = trace.HitPos
 					tr.endpos = tr.start + Dir2 * 0.1
 					tr.filter = self.Owner
 					tr.mask = self.NormalTraceMask
-					
+
 					trace = util.TraceLine(tr) -- run ANOTHER trace to check whether we've penetrated a surface or not
-					
+
 					if not trace.Hit then
 						bul.Num = 1
 						bul.Src = trace.HitPos
@@ -114,9 +115,10 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 						bul.Tracer	= 4
 						bul.Force	= damage * 0.15
 						bul.Damage = bul.Damage * 0.5
-						
-						self.Owner:FireBullets(bul)
-						
+						bul.Attacker = self.Owner
+
+						self:FireBullets(bul)
+
 						bul.Num = 1
 						bul.Src = trace.HitPos
 						bul.Dir = -Dir2
@@ -124,15 +126,16 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 						bul.Tracer	= 4
 						bul.Force	= damage * 0.15
 						bul.Damage = bul.Damage * 0.5
-						
-						self.Owner:FireBullets(bul)
+						bul.Attacker = self.Owner
+
+						self:FireBullets(bul)
 					end
 				else
 					if self:canRicochet(trace) then
 						dot = dot or self:getSurfaceReflectionDotProduct(trace, Dir2)
 						Dir2 = Dir2 + (trace.HitNormal * dot) * 3
 						math.randomizeVector(Dir2, 0.06)
-						
+
 						bul.Num = 1
 						bul.Src = trace.HitPos
 						bul.Dir = Dir2
@@ -140,13 +143,14 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 						bul.Tracer	= 0
 						bul.Force	= damage * 0.225
 						bul.Damage = bul.Damage * 0.75
-						
-						self.Owner:FireBullets(bul)
+						bul.Attacker = self.Owner
+
+						self:FireBullets(bul)
 					end
 				end
 			end
 		end
 	end
-		
+
 	tr.mask = self.NormalTraceMask
 end
