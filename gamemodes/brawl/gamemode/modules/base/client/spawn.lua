@@ -1,5 +1,3 @@
-brawl.spawns = brawl.spawns or {}
-
 hook.Add( "HUDPaint", "brawl.spawn", function()
 
 	if not brawl.config.debug then return end
