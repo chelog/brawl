@@ -9,7 +9,7 @@ function SWEP:_attach(cur, curPos, inherit)
 	
 	if SERVER then
 		umsg.Start("CW20_ATTACH", self.Owner)
-			umsg.Entity(self)
+			umsg.Long(self:EntIndex())
 			umsg.String(cur)
 			umsg.Short(curPos)
 		umsg.End()
@@ -53,10 +53,8 @@ function SWEP:_attach(cur, curPos, inherit)
 
 	if CLIENT then
 		-- if there is a model with the provided name, make it visible
-		
 		if self.AttachmentModelsVM then
 			local model = self.AttachmentModelsVM[attTable.atts[curPos]]
-			
 			if model then
 				model.active = true
 			end
@@ -237,6 +235,56 @@ function SWEP:detachAll()
 	end
 end
 
+--[[function SWEP:SaveAttachmentsTo( ent ) DELETE!
+
+	if SERVER then
+		net.Start( "brawl.SaveAttachmentsTo" )
+			net.WriteEntity( self )
+		net.Send( self.Owner )
+	end
+	
+end]]
+
+function SWEP:LoadAttachments( data )
+
+	local loadOrder = {}
+	for k, v in pairs(data.content) do
+		local attCategory = self.Attachments[k]
+		
+		-- make sure we're loading a registered attachment
+		if attCategory then
+			local att = CustomizableWeaponry.registeredAttachmentsSKey[attCategory.atts[v]]
+			
+			if att then
+				local pos = 1
+				
+				-- if the attachment has dependencies, put it in the back of the load order, and load ones that don't depend on anything
+				if att.dependencies or attCategory.dependencies or (self.AttachmentDependencies and self.AttachmentDependencies[att.name]) then
+					pos = #loadOrder + 1
+				end
+				
+				table.insert(loadOrder, pos, {category = k, position = v})
+			end
+		end
+	end
+
+	-- don't forget to detach everything prior to loading an attachment preset
+	self:detachAll()
+	
+	for k, v in pairs(loadOrder) do
+		self:attach(v.category, v.position - 1)
+	end
+	
+	CustomizableWeaponry.grenadeTypes.setTo(self, (data.content.grenadeType or 0), true)
+	timer.Simple( 0.5, function() -- FIX ME
+		net.Start( "weapon.finishLoadAttachments" )
+			net.WriteEntity( self )
+			net.WriteTable( data )
+		net.Send( self.Owner )
+	end)
+
+end
+
 function SWEP:countActiveAttachments()
 	local amount = 0
 	
@@ -334,34 +382,51 @@ function SWEP:performAttachmentEligibilityCheck(attachmentCategoryData, attachme
 end
 
 if CLIENT then
+	local attachCache = {}
+
 	local function CW20_ATTACH(um)
-		local wep = um:ReadEntity()
+		local wepId = um:ReadLong()
 		local category = um:ReadString()
 		local pos = um:ReadShort()
 		
-		local numberCategory = tonumber(category)
-		
-		if numberCategory then
-			category = numberCategory
-		end
-		
-		local ply = LocalPlayer()
-		
-		if not IsValid(wep) or not wep.CW20Weapon then
-			return
-		end
-		
-		if wep:_attach(category, pos) then
-			if CustomizableWeaponry.playSoundsOnInteract then
-				if CurTime() > wep.AttachSoundDelay then
-					surface.PlaySound("cw/attach.wav")
-					wep.AttachSoundDelay = CurTime() + FrameTime() * 3
-				end
-			end
-		end
+		attachCache[ wepId ] =  attachCache[ wepId ] or {}
+		attachCache[ wepId ][ category ] = pos
+
 	end
 	
 	usermessage.Hook("CW20_ATTACH", CW20_ATTACH)
+	hook.Remove( "Think", "weapon.attachCache" )
+	hook.Add( "Think", "weapon.attachCache", function()
+
+		for k, v in pairs(attachCache) do
+			for category, pos in pairs(attachCache[ k ]) do
+				local wep = Entity( k )
+				if IsValid(wep) then
+					local numberCategory = tonumber(category)
+				
+					if numberCategory then
+						category = numberCategory
+					end
+					
+					local ply = LocalPlayer()
+
+					if not wep.CW20Weapon then
+						return
+					end
+
+					if wep:_attach(category, pos) then
+						if CustomizableWeaponry.playSoundsOnInteract then
+							if CurTime() > wep.AttachSoundDelay then
+								surface.PlaySound("cw/attach.wav")
+								wep.AttachSoundDelay = CurTime() + FrameTime() * 3
+							end
+						end
+					end
+					attachCache[ k ]  = nil
+				end
+			end
+		end
+	end)
 	
 	local function CW20_DETACH(um)
 		local wep = um:ReadEntity()
