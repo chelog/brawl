@@ -1,6 +1,3 @@
-brawl.spawn = {}
-brawl.spawns = brawl.spawns or {}
-
 function brawl.spawn.add( t )
 
 	if not t or not t.pos then return end
@@ -17,13 +14,17 @@ function brawl.spawn.remove( id )
 
 end
 
-function brawl.spawn.update()
+function brawl.spawn.update(ply)
 
 	brawl.spawn.save()
 
-	net.Start( "brawl.spawn" )
+	net.Start( "brawl.spawn.send" )
 		net.WriteTable( brawl.spawns )
-	net.Broadcast()
+	if IsValid(ply) then
+		net.Send( ply )
+	else
+		net.Broadcast()
+	end
 
 end
 
@@ -193,11 +194,6 @@ function brawl.spawn.load( name )
 end
 
 -- ULib.ucl.registerAccess( "brawl_edit_spawns", ULib.ACCESS_SUPERADMIN, "Edit Brawl spawns", "Brawl" )
-function brawl.spawn.isAllowed( ply )
-
-	return ply:IsSuperAdmin()
-
-end
 
 concommand.Add( "brawl_spawn_add",function( ply, cmd, args, argStr )
 
@@ -212,7 +208,7 @@ concommand.Add( "brawl_spawn_add",function( ply, cmd, args, argStr )
 		ang = ang
 	})
 
-end, nil, nil, FCVAR_REPLICATED)
+end)
 
 concommand.Add( "brawl_spawn_remove",function( ply, cmd, args, argStr )
 
@@ -223,20 +219,10 @@ concommand.Add( "brawl_spawn_remove",function( ply, cmd, args, argStr )
 
 	brawl.spawn.remove( id )
 
-end, nil, nil, FCVAR_REPLICATED)
+end)
 
 concommand.Add( "brawl_spawn_reload", function( ply, cmd, arg, argStr )
 
 	brawl.spawn.load()
-
-end, nil, nil, FCVAR_REPLICATED)
-
-hook.Add("PlayerInitialSpawn", "brawl.spawn.send", function( ply )
-
-	if not IsValid(ply) then return end
-
-	net.Start( "brawl.spawn.send" )
-		net.WriteTable( brawl.spawns )
-	net.Send( ply )
 
 end)
