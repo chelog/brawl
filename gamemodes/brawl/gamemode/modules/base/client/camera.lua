@@ -161,11 +161,11 @@ end)
 function setDSP( curState )
 
 	local dsp = 1
-	if curState > .8 then
+	if curState > .9 then
 		dsp = 16
-	elseif curState > .65 then
+	elseif curState > .8 then
 		dsp = 15
-	elseif curState > .5 then
+	elseif curState > .75 then
 		dsp = 14
 	end
 	LocalPlayer():SetDSP( dsp )
