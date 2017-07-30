@@ -299,6 +299,7 @@ parameters
 ---------------------------------------------------------------------------]]
 function brawl.includeModuleFolders( name, core )
 	local path = brawl.getModulePath( name, core )
+	includeFolder( path .."/shared" )
 	if SERVER then
 		includeFolder( path .."/server" )
 		AddCSLuaFolder( path .."/client" )
@@ -306,7 +307,6 @@ function brawl.includeModuleFolders( name, core )
 	else
 		includeFolder( path .."/client" )
 	end
-	includeFolder( path .."/shared" )
 end
 
 function math.randomSign()
