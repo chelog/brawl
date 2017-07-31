@@ -7,36 +7,37 @@ CUSTOM CONFIGURATION FILE
 	There's not much info here but it's only for now.
 ---------------------------------------------------------------------------]]
 
+-- basic server configuration
 brawl.config.server = {
 
-	name = "[#] Brawl dev server - v" .. brawl.version,
-	password = "8",
+	name = "Just another Brawl server (v" .. brawl.version .. ")",
+	password = "",
 	loadingURL = "http://www.octothorp.team/changelog/?s=brawl",
 
+	-- these commands will be executed by server during map loading
 	runCommands = {
 		"net_maxfilesize 64",
-		"sv_allowcslua 1"
 	},
 
+	-- this is CLIENT content, thus it will NOT be downloaded by server
+	-- place here any models, materials etc. content INSTEAD of telling players to subscribe to addons
 	workshop = {
-		-- PMC models
-		"232636218",
-		-- COD4 sniper
-		"400617936",
-
-		-- Insurgency bullet holes
-		"297516501",
-
-		-- Brawl content
+		-- DO NOT delete these addons, they are required by gamemode
 		"1095528851",
 		"1095539006",
 		"1095542254",
 		"1095545406",
 		"1095548291",
+
+		-- you can add here more addons, however you should leave these ones here if you use default player models
+		"232636218", -- PMC models
+		"400617936", -- COD4 sniper
+		"297516501", -- Insurgency bullet holes
 	},
 
 }
 
+-- various player settings
 brawl.config.player = {
 	baseWalkSpeed = 200,
 	baseRunSpeed = 300,
@@ -49,6 +50,7 @@ brawl.config.player = {
 	healthRegenRate = 2,
 }
 
+-- map list, maps MUST be setup here before
 brawl.config.maps = {
 	dm_basebunker = {
 		name = "Base Bunker", workshop = "812797510",
@@ -90,11 +92,6 @@ brawl.config.maps = {
 		img = "https://steamuserimages-a.akamaihd.net/ugc/920118814791669595/29413F17721E7E2750D3C0F9A8F26CFEC9230B10/",
 		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
-	-- rp_eastcoast_v4b = {
-	-- 	name = "Dobrograd", workshop = "817430636",
-	-- 	img = "http://images.akamai.steamusercontent.com/ugc/99473989861329244/B313069CC86B7E7E2E651BCB8F34A987C05BAE51/",
-	-- 	modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
-	-- },
 	dm_streetwar_b1 = {
 		name = "Streetwar", workshop = "446039435",
 		img = "https://steamuserimages-a.akamaihd.net/ugc/540775374405727353/1982CA9E54A819E09EB2DFCFAD6C679D12BA8E62/",
@@ -130,8 +127,18 @@ brawl.config.maps = {
 		img = "https://steamuserimages-a.akamaihd.net/ugc/89347071775451938/FDCE7BC93A97DC65461B6162486C8513A0D0D38E/",
 		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
+
+	-- add more maps by using this template
+
+	-- MAP_NAME_WITHOUT_BSP = {
+	-- 	name = "NICE MAP NAME", workshop = "WORKSHOP ID",
+	-- 	img = "URL TO SCREENSHOT",
+	-- 	modes = { "ALLOWED", "MODES", "SEE", "EXAMPLES", "ABOVE" },
+	-- },
 }
 
+-- player models, level needed for models is in brackets
+-- one random model out of this list will be chosen
 brawl.config.playerModels = {
 
 	[1] = {
@@ -239,6 +246,7 @@ brawl.config.playerModels = {
 
 }
 
+-- weapon classes (better leave them default)
 brawl.config.weapons = {
 
 	melee = {
