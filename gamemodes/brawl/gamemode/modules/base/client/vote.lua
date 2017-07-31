@@ -131,7 +131,10 @@ net.Receive( "brawl.vote.start", function( len )
 		menu.container:SetVisible( true )
 	end)
 
-	surface.PlaySound( "brawl/vote-map.ogg" )
+	surface.PlaySound(table.Random({
+		"brawl/vote-map.ogg",
+		"brawl/vote-map2.ogg",
+	}))
 
 	timer.Simple( 29.7, function()
 		menu.container:Clear()
