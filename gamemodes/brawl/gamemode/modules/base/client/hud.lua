@@ -882,12 +882,22 @@ net.Receive( "brawl.killfeed", function( len )
 	local data = net.ReadTable()
 	if not data.victim:IsPlayer() then return end
 
+	local important = false
+
 	local killer = data.attacker:IsPlayer() and data.attacker:Name() or "World"
-	if data.attacker == LocalPlayer() then killer = "You" end
+	if data.attacker == LocalPlayer() then
+		killer = "You"
+		important = true
+	end
+	local victim = data.victim:Name()
+	if data.victim == LocalPlayer() then
+		victim = "you"
+		important = true
+	end
 	local killerCol = data.attacker:IsPlayer() and data.attacker:GetTeamColor() or color_white
 	local victimCol = data.victim:GetTeamColor() or color_white
 	local wep = data.inflictor
-	if wep == "player" then
+	if wep:GetClass() == "player" then
 		local awep = data.inflictor:GetActiveWeapon()
 		wep = IsValid( awep ) and awep
 	end
@@ -897,15 +907,15 @@ net.Receive( "brawl.killfeed", function( len )
 		brawl.hud.addNotification({
 			killerCol, killer,
 			color_white, " killed ",
-			victimCol, data.victim == LocalPlayer() and "you" or data.victim:Name(),
+			victimCol, victim,
 			color_white, " with ",
 			wepName
-		})
+		}, important and "other" or nil)
 	else
 		brawl.hud.addNotification({
 			killerCol, killer,
 			color_white, " committed suicide"
-		})
+		}, important and "other" or nil)
 	end
 
 end)
