@@ -180,7 +180,7 @@ function meta:DoPlayerDeath( attacker, dmg )
 
 	if self.TeamSwitch then
 		self.TeamSwitch = nil
-	else
+	else 
 		SetGlobalInt( "brawl.KillsThisRound", GetGlobalInt( "brawl.KillsThisRound" ) + 1 )
 		SetGlobalInt( "brawl.KillsThisMode", GetGlobalInt( "brawl.KillsThisMode" ) + 1 )
 	end
@@ -213,7 +213,7 @@ function meta:DropWeapon( wep )
 
 	local drop = ents.Create( "brawl_weapon" )
 	drop:Spawn()
-	drop:SetWeapon( wep )
+	drop:setWeapon( wep )
 	drop:SetPos( self:GetShootPos() )
 
 	local phys = drop:GetPhysicsObject()

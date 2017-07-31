@@ -40,7 +40,7 @@ function meta:GetWeaponByCategory( cat )
 
 		local curCat = wep:GetNWString( "WeaponCategory" )
 		if not curCat or curCat == "" then
-			brawl.msg( "Fixing category for %s", wep:GetClass() )
+			brawl.msg( "Fixing category for %s (\"%s\" -> \"%s\")", wep:GetClass(), wep:GetNWString( "WeaponCategory" ), wep:GetWeaponCategory() )
 			wep:SetNWString( "WeaponCategory", wep:GetWeaponCategory() )
 		end
 

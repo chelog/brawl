@@ -9,7 +9,7 @@ function SWEP:_attach(cur, curPos, inherit)
 	
 	if SERVER then
 		umsg.Start("CW20_ATTACH", self.Owner)
-			umsg.Long(self:EntIndex())
+			umsg.Entity(self)
 			umsg.String(cur)
 			umsg.Short(curPos)
 		umsg.End()
@@ -382,51 +382,39 @@ function SWEP:performAttachmentEligibilityCheck(attachmentCategoryData, attachme
 end
 
 if CLIENT then
-	local attachCache = {}
 
 	local function CW20_ATTACH(um)
-		local wepId = um:ReadLong()
+		local wep = um:ReadEntity()
 		local category = um:ReadString()
 		local pos = um:ReadShort()
+
+		if IsValid(wep) then
+			local numberCategory = tonumber(category)
 		
-		attachCache[ wepId ] =  attachCache[ wepId ] or {}
-		attachCache[ wepId ][ category ] = pos
+			if numberCategory then
+				category = numberCategory
+			end
+			
+			local ply = LocalPlayer()
+
+			if not wep.CW20Weapon then
+				return
+			end
+
+			if wep:_attach(category, pos) then
+				if CustomizableWeaponry.playSoundsOnInteract then
+					if CurTime() > wep.AttachSoundDelay then
+						surface.PlaySound("cw/attach.wav")
+						wep.AttachSoundDelay = CurTime() + FrameTime() * 3
+					end
+				end
+			end
+		end
 
 	end
 	
 	usermessage.Hook("CW20_ATTACH", CW20_ATTACH)
-	hook.Remove( "Think", "weapon.attachCache" )
-	hook.Add( "Think", "weapon.attachCache", function()
-
-		for k, v in pairs(attachCache) do
-			for category, pos in pairs(attachCache[ k ]) do
-				local wep = Entity( k )
-				if IsValid(wep) then
-					local numberCategory = tonumber(category)
-				
-					if numberCategory then
-						category = numberCategory
-					end
-					
-					local ply = LocalPlayer()
-
-					if not wep.CW20Weapon then
-						return
-					end
-
-					if wep:_attach(category, pos) then
-						if CustomizableWeaponry.playSoundsOnInteract then
-							if CurTime() > wep.AttachSoundDelay then
-								surface.PlaySound("cw/attach.wav")
-								wep.AttachSoundDelay = CurTime() + FrameTime() * 3
-							end
-						end
-					end
-					attachCache[ k ]  = nil
-				end
-			end
-		end
-	end)
+	
 	
 	local function CW20_DETACH(um)
 		local wep = um:ReadEntity()

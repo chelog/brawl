@@ -1,5 +1,5 @@
 ENT.Type = "anim"
-ENT.Base = "base_entity"
+ENT.Base = "cw_dropped_weapon"
 
 ENT.PrintName		= "Weapon base"
 ENT.Author			= "chelog"

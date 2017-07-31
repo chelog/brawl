@@ -14,6 +14,8 @@ function ENT:Use(activator, caller)
 		return
 	end
 	
+	if not GAMEMODE:PlayerCanPickupWeaponClass( self:GetWepClass() ) then return end
+
 	local pos = self:GetPos() - activator:GetShootPos()
 	local pickupDotProduct = activator:EyeAngles():Forward():Dot(pos) / pos:Length()
 		
@@ -37,14 +39,30 @@ function ENT:Use(activator, caller)
 	local wep = nil
 	
 	if canGetWeapon then -- give the weapon if possible
+		local newcat = self:GetNWString( "WeaponCategory" )
+
+		for k, v in pairs( activator:GetWeapons() ) do
+			local oldcat = v:GetNWString( "WeaponCategory" )
+			if newcat == oldcat then
+				if v.disableDropping then
+					return
+				else
+					activator:DropWeapon( v )
+				end
+			end
+		end
 		wep = activator:Give(self:GetWepClass())
+		wep:SetNWString( "WeaponCategory", newcat )
 		hook.Call("CW20_PickedUpCW20Weapon", nil, activator, self, wep)
 		wep.disableDropping = true -- we set this variable to true so that the player can not drop the weapon using the cw_dropweapon command until attachments are applied
+	else 
+		activator:GetWeapon(self:GetWepClass()):SetClip1( activator:GetWeapon(self:GetWepClass()):Clip1() + self.magSize )
+		self:Remove()
 	end
 	
-	if canGetAttachments then -- give attachments if possible
+	--[[if canGetAttachments then -- give attachments if possible
 		CustomizableWeaponry.giveAttachments(activator, self.stringAttachmentIDs)
-	end
+	end]]
 	
 	local attachments = self.containedAttachments
 	local magSize = self.magSize
@@ -55,7 +73,7 @@ function ENT:Use(activator, caller)
 			if not IsValid(wep) then
 				return
 			end
-			
+
 			wep:SetClip1(0) -- set magsize to 0 before loading attachments, because some of them unload the mag and that way we can cheat ammo (by dropping and picking up again)
 			
 			CustomizableWeaponry.preset.load(wep, attachments, "DroppedWeaponPreset") -- the preset system is super flexible and can easily be used for such purposes
@@ -75,6 +93,8 @@ end
 
 function ENT:setWeapon(wep)
 	self:SetWepClass(wep:GetClass())
+	self:SetNWString( "WeaponCategory", wep:GetNWString( "WeaponCategory" ))
+	self:SetNWString( "WeaponClass", wep:GetClass() )
 	self.magSize = wep:Clip1()
 	self.containedAttachments = {} -- for shit like loading them onto a weapon
 	self.stringAttachmentIDs = {} -- for shit like displaying the attachment names and giving them to the player upon pickup
