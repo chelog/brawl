@@ -80,7 +80,7 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 			bul.Callback = self.bulletCallback
 			bul.Attacker = self.Owner
 
-			self:FireBullets(bul)
+			self.Owner:FireBullets(bul)
 
 			tr.start = sp
 			tr.endpos = tr.start + Dir2 * self.PenetrativeRange
@@ -117,7 +117,7 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 						bul.Damage = bul.Damage * 0.5
 						bul.Attacker = self.Owner
 
-						self:FireBullets(bul)
+						self.Owner:FireBullets(bul)
 
 						bul.Num = 1
 						bul.Src = trace.HitPos
@@ -128,7 +128,7 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 						bul.Damage = bul.Damage * 0.5
 						bul.Attacker = self.Owner
 
-						self:FireBullets(bul)
+						self.Owner:FireBullets(bul)
 					end
 				else
 					if self:canRicochet(trace) then
@@ -145,7 +145,7 @@ function SWEP:FireBullet(damage, cone, clumpSpread, bullets)
 						bul.Damage = bul.Damage * 0.75
 						bul.Attacker = self.Owner
 
-						self:FireBullets(bul)
+						self.Owner:FireBullets(bul)
 					end
 				end
 			end

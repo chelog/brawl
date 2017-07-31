@@ -896,12 +896,12 @@ net.Receive( "brawl.killfeed", function( len )
 	end
 	local killerCol = data.attacker:IsPlayer() and data.attacker:GetTeamColor() or color_white
 	local victimCol = data.victim:GetTeamColor() or color_white
-	local wep = data.inflictor
-	if wep:GetClass() == "player" then
+	local wep = data.inflictor or data.attacker or Entity(0)
+	if IsValid( wep ) and wep:GetClass() == "player" then
 		local awep = data.inflictor:GetActiveWeapon()
 		wep = IsValid( awep ) and awep
 	end
-	wepName = wep.PrintName or wep:GetClass() or "something"
+	wepName = IsValid( wep ) and (wep.PrintName or wep:GetClass()) or "something"
 
 	if data.attacker ~= data.victim then
 		brawl.hud.addNotification({
