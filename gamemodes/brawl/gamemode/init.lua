@@ -68,10 +68,12 @@ function brawl.initConCommands()
 	for _, id in pairs( brawl.config.server.workshop ) do
 		resource.AddWorkshop( id )
 	end
-	local mapID = brawl.config.maps[ game.GetMap() ].workshop
+
+	local map = string.lower( game.GetMap() )
+	local mapID = brawl.config.maps[ map ].workshop
 	if mapID then
 		resource.AddWorkshop( mapID )
-		brawl.msg( "Added workshop download for %s (%s)", brawl.config.maps[ game.GetMap() ].name, mapID )
+		brawl.msg( "Added workshop download for %s (%s)", brawl.config.maps[ map ].name, mapID )
 	end
 
 	-- startup commands
