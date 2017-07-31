@@ -1,6 +1,7 @@
 # Brawl
 
-This is a submission for gmodstore Gamemode Competition.
+This is a submission for gmodstore Gamemode Competition.  
+You can join and test the latest version on `37.230.210.93:27888`
 
 ![Screenshot](http://i.imgur.com/QoOeCt4.jpg)
 
