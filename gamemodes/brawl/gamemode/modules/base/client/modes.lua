@@ -13,7 +13,7 @@ function brawl.modes.register( name, t )
 
 end
 
-net.Receive( "brawl.endRound", function( len )
+net.Receive( "brawl.round.end", function( len )
 
 	local data = net.ReadTable()
 
@@ -23,3 +23,13 @@ end)
 
 local path = brawl.getModulePath( "base", true )
 includeFolder( path .. "/client/modes" )
+
+net.Receive( "brawl.round.start", function( len )
+
+	brawl.modes.overlay = {
+		delay = net.ReadFloat(),
+		title = net.ReadString(),
+		subtitle = net.ReadString(),
+	}
+
+end)

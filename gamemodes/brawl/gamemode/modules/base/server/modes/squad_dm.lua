@@ -50,6 +50,8 @@ end
 
 function mode.NewRound( type )
 
+	local delay = 6.1
+
 	game.CleanUpMap()
 	brawl.CleanUpMap()
 
@@ -62,12 +64,18 @@ function mode.NewRound( type )
 			ply:SetNWBool( "Spectating", false )
 			ply:Spawn()
 			ply:Freeze( true )
+
+			net.Start( "brawl.round.start" )
+				net.WriteFloat( delay )
+				net.WriteString( mode.name )
+				net.WriteString( mode.agenda )
+			net.Send( ply )
 		end
 	end
 
 	SetGlobalInt( "brawl.RoundState", 1 )
 
-	timer.Simple( 5, function()
+	timer.Simple( delay, function()
 		for k, ply in pairs( player.GetAll() ) do
 			ply:Freeze( false )
 		end
@@ -121,8 +129,16 @@ end
 function mode.PlayerInitialSpawn( ply )
 
 	timer.Simple(0, function()
+		local delay = 6.1
+
 		ply:KillSilent()
-		ply:SetNWFloat( "RespawnTime", CurTime() + 5 )
+		ply:SetNWFloat( "RespawnTime", CurTime() + delay )
+
+		net.Start( "brawl.round.start" )
+			net.WriteFloat( delay )
+			net.WriteString( mode.name )
+			net.WriteString( mode.agenda )
+		net.Send( ply )
 
 		local t = team.BestAutoJoinTeam( ply )
 		ply:SetTeam( t )

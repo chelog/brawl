@@ -77,7 +77,7 @@ function brawl.EndRound( data )
 
 	brawl.modes.active.EndRound( data )
 
-	net.Start( "brawl.endRound" )
+	net.Start( "brawl.round.end" )
 		net.WriteTable( data )
 	net.Broadcast()
 

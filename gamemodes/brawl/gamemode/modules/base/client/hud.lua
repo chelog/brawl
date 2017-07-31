@@ -60,7 +60,7 @@ brawl.hud = {}
 
 function brawl.hud.draw()
 
-	if not LocalPlayer() then return end
+	if not IsValid( LocalPlayer() ) then return end
 
 	brawl.hud.drawHitMarker()
 	brawl.hud.drawLevelUp()
@@ -68,6 +68,7 @@ function brawl.hud.draw()
 	brawl.hud.drawAmmo()
 	brawl.hud.drawScoreboard()
 	brawl.hud.drawNotifications()
+	brawl.hud.drawRoundOverlay()
 
 	if LocalPlayer():GetNWBool( "Spectating" ) then
 		brawl.hud.drawSpectate()
@@ -84,6 +85,96 @@ function brawl.hud.draw()
 
 end
 hook.Add( "HUDPaint", "brawl.hud", brawl.hud.draw )
+
+local blur = Material( "pp/blurscreen" )
+hook.Remove( "RenderScreenspaceEffects", "brawl.round.overlay" )
+hook.Add( "PreDrawViewModel", "brawl.round.overlay", function()
+
+	if not brawl.modes.overlay or not brawl.modes.overlay.outTime then return end
+
+	if CurTime() - brawl.modes.overlay.outTime < 0 then
+		local a = math.Clamp( math.TimeFraction( brawl.modes.overlay.outTime - 0.25, brawl.modes.overlay.outTime, CurTime() ), 0, 1 )
+
+		DrawColorModify({
+			[ "$pp_colour_brightness" ] = a,
+			[ "$pp_colour_contrast" ] = 1.5 - a,
+			[ "$pp_colour_colour" ] = 0,
+		})
+
+		cam.Start2D()
+			surface.SetDrawColor( 255, 255, 255 )
+			surface.SetMaterial( blur )
+
+			for i = 1, 3 do
+				blur:SetFloat( "$blur", i * 2 )
+				blur:Recompute()
+
+				render.UpdateScreenEffectTexture()
+				surface.DrawTexturedRect( -1, -1, ScrW() + 2, ScrH() + 2 )
+			end
+		cam.End2D()
+	else
+		local a = 1 - math.Clamp( math.TimeFraction( brawl.modes.overlay.outTime, brawl.modes.overlay.outTime + 0.75, CurTime() ), 0, 1 )
+		DrawColorModify({
+			[ "$pp_colour_brightness" ] = a,
+			[ "$pp_colour_contrast" ] = 1 - a * 0.5,
+			[ "$pp_colour_colour" ] = 1 - a,
+		})
+	end
+
+end)
+
+function brawl.hud.drawRoundOverlay()
+
+	if not brawl.modes.overlay then return end
+
+	if not brawl.modes.overlay.started then
+		surface.PlaySound( "brawl/round-start.ogg" )
+		brawl.modes.overlay.outTime = CurTime() + brawl.modes.overlay.delay
+		brawl.modes.overlay.started = true
+	end
+
+	if CurTime() < brawl.modes.overlay.outTime then
+		local x, y = ScrW() / 2, ScrH() / 2 - 150
+		draw.Text({
+			text = brawl.modes.overlay.title,
+			font = "brawl.hud.large",
+			pos = { x, y },
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_TOP,
+			color = Color( 255,255,255 )
+		}) draw.Text({
+			text = brawl.modes.overlay.title,
+			font = "brawl.hud.large",
+			pos = { x + 1, y + 1 },
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_TOP,
+			color = Color( 0,0,0, 50 )
+		})
+
+		local x2, y2 = ScrW() / 2, ScrH() / 2 - 110
+		draw.Text({
+			text = brawl.modes.overlay.subtitle,
+			font = "brawl.hud.normal",
+			pos = { x2, y2 },
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_TOP,
+			color = Color( 255,255,255 )
+		}) draw.Text({
+			text = brawl.modes.overlay.subtitle,
+			font = "brawl.hud.normal",
+			pos = { x2 + 1, y2 + 1 },
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_TOP,
+			color = Color( 0,0,0, 50 )
+		})
+	end
+
+	if CurTime() > brawl.modes.overlay.outTime + 2 then
+		brawl.modes.overlay = nil
+	end
+
+end
 
 function brawl.hud.drawSpectate()
 

@@ -62,6 +62,8 @@ end
 
 function mode.NewRound( type )
 
+	local delay = 6.1
+
 	game.CleanUpMap()
 	brawl.CleanUpMap()
 
@@ -72,12 +74,18 @@ function mode.NewRound( type )
 			ply:SetNWBool( "Spectating", false )
 			ply:Spawn()
 			ply:Freeze( true )
+
+			net.Start( "brawl.round.start" )
+				net.WriteFloat( delay )
+				net.WriteString( mode.name )
+				net.WriteString( mode.agenda )
+			net.Send( ply )
 		end
 	end
 
 	SetGlobalInt( "brawl.RoundState", 1 )
 
-	timer.Simple( 5, function()
+	timer.Simple( delay, function()
 		for k, ply in pairs( player.GetAll() ) do
 			ply:Freeze( false )
 		end

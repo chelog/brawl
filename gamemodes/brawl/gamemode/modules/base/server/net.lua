@@ -9,7 +9,8 @@ util.AddNetworkString "brawl.vote.finish"
 util.AddNetworkString "brawl.spawn"
 util.AddNetworkString "brawl.spawn.send"
 
-util.AddNetworkString "brawl.endRound"
+util.AddNetworkString "brawl.round.end"
+util.AddNetworkString "brawl.round.start"
 
 util.AddNetworkString "brawl.exp.add"
 util.AddNetworkString "brawl.exp.levelUp"
