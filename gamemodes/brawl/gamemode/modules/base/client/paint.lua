@@ -74,7 +74,7 @@ brawl.paint.gameInfoPanel = function( self, w, h )
 	txtData.font = "brawl.menu.large"
 	draw.Text(txtData)
 
-	local map = game.GetMap()
+	local map = string.lower( game.GetMap() )
 	txtData.text = "on " .. brawl.config.maps[ map ].name
 	txtData.pos = { 445, 40 }
 	txtData.font = "brawl.menu.normal"

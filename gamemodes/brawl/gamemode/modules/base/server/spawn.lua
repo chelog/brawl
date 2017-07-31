@@ -133,7 +133,7 @@ end
 function brawl.spawn.save( name )
 
 	name = name or "default"
-	local map = game.GetMap()
+	local map = string.lower( game.GetMap() )
 	local data = util.TableToJSON( brawl.spawns )
 
 	-- MySQLite.query(string.format("SELECT * FROM brawl_spawns WHERE map = %s AND name = %s",
@@ -166,7 +166,7 @@ end
 function brawl.spawn.load( name )
 
 	name = name or "default"
-	local map = game.GetMap()
+	local map = string.lower( game.GetMap() )
 
 	-- MySQLite.query(string.format("SELECT * FROM brawl_spawns WHERE map = %s AND name = %s",
 	--	 MySQLite.SQLStr( map ), MySQLite.SQLStr( name )

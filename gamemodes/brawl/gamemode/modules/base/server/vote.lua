@@ -6,7 +6,7 @@ function brawl.VoteStart()
 	local mapsLeft, i = 6, 1
 	for map, data in RandomPairs( brawl.config.maps ) do
 		if mapsLeft <= 0 then break end
-		if map == game.GetMap() then continue end
+		if map == string.lower( game.GetMap() ) then continue end
 		brawl.vote.data[i] = { map = map, mode = table.Random(data.modes), votes = 0 }
 
 		mapsLeft = mapsLeft - 1

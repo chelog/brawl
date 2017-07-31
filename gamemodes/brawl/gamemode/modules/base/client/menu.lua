@@ -95,7 +95,7 @@ local function tabCurGame()
 	gameInfo:SetPos( 20, 50 )
 	gameInfo.Paint = brawl.paint.gameInfoPanel
 
-	local url = brawl.config.maps[ game.GetMap() ].img
+	local url = brawl.config.maps[ string.lower(game.GetMap()) ].img
 	local img = vgui.Create( "DHTML", gameInfo )
 	img:SetSize( 128, 128 )
 	img:SetPos( 1, 1 )
