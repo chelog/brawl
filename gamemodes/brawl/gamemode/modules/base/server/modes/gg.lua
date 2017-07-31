@@ -214,18 +214,20 @@ function mode.DoPlayerDeath( victim, attacker, dmg )
 				})
 			end
 
-			mode.AddStage( attacker, 1 )
-			attacker:StripWeapons()
-			attacker:SetFrags(0)
+			timer.Simple( 1, function()
+				mode.AddStage( attacker, 1 )
+				attacker:StripWeapons()
+				attacker:SetFrags(0)
 
-			mode.PlayerLoadWeapons( attacker )
+				mode.PlayerLoadWeapons( attacker )
+			end)
 		end
 
-		-- local wep = IsValid(dmg:GetInflictor()) and dmg:GetInflictor():IsWeapon() and dmg:GetInflictor() or attacker:GetActiveWeapon()
-		-- if wep and wep:GetClass() == "cw_fc2_machete" then
-		-- 	mode.AddStage( victim, -1 )
-		-- 	victim:SetFrags(0)
-		-- end
+		local wep = IsValid(dmg:GetInflictor()) and dmg:GetInflictor():IsWeapon() and dmg:GetInflictor() or attacker:GetActiveWeapon()
+		if wep and wep:GetClass() == "cw_fc2_machete" or victim == attacker then
+			mode.AddStage( victim, -1 )
+			victim:SetFrags(0)
+		end
 	end
 
 end
