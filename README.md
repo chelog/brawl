@@ -52,5 +52,11 @@ In main menu (opened by ESC) on **Game** tab you can change teams or toggle spec
 
 **I recommend setting from 20 to 35 spawnpoints for new maps. All maps included in test collection have predefined spawnpoints.**
 
+### Credits
+This gamemode wouldn't exist without these people:
+
+- **spy, tigg, tayley, Matsilagi, wystan, FA:S 2.0 team** - prividing CW2.0 weapon base  
+- **Octothorp Team followers** - for extensive testing the gamemode  
+
 ### Support
 If you need any help on gamemode write me on chelog@octothorp.team
