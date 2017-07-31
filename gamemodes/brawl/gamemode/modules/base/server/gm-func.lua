@@ -180,11 +180,13 @@ end
 
 function GM:PlayerCanDropWeapon( ply, wep )
 
+	if not IsValid(wep) then return false end
+
 	if brawl.modes.active.PlayerCanDropWeapon then
 		return brawl.modes.active.PlayerCanDropWeapon( ply, wep )
 	end
 
-	return true
+	return wep:GetWeaponCategory() ~= "melee"
 
 end
 

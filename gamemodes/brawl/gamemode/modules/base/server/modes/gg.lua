@@ -245,4 +245,10 @@ function mode.PlayerCanPickupWeaponClass( ply, class )
 
 end
 
+function mode.PlayerCanDropWeapon( ply, wep )
+
+	return false
+
+end
+
 brawl.modes.register( "gg", mode )
