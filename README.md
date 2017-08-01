@@ -41,9 +41,11 @@ In main menu (opened by ESC) on **Game** tab you can change teams or toggle spec
 
 - Counter-Strike-like buying system for some modes
 - Unlockable attachments
+- Proning
+- Insurgency-like leaning
 - More awards while earning new levels
 - More modes (see modes section)
-- More things; if I get money for living from Brawl I'll surely have a lot of time to work on gamemode with your suggestions
+- More things; if I get money from Brawl I'll surely have a lot of time to work on gamemode with your suggestions
 
 ### Installation
 
@@ -73,4 +75,5 @@ This gamemode wouldn't exist without these people:
 - **Octothorp Team followers** - for extensive testing the gamemode  
 
 ### Support
-If you need any help on gamemode write me on chelog@octothorp.team
+If you need any help on gamemode write me on chelog@octothorp.team  
+If you spot a bug please creaete an issue in this repo.
