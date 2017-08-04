@@ -150,11 +150,11 @@ function mode.PlayerInitialSpawn( ply )
 	timer.Simple(0,function()
 		local t = team.BestAutoJoinTeam( ply )
 		ply:SetTeam( t )
-		brawl.NotifyAll(
+		brawl.NotifyAll({
 			team.GetColor(t), ply:Name(),
 			color_white, " joined ",
 			team.GetColor(t), team.GetName(t) .. " squad"
-		)
+		})
 	end)
 
 end
