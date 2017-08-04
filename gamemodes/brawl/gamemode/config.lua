@@ -67,11 +67,11 @@ brawl.config.maps = {
 		img = "https://steamuserimages-a.akamaihd.net/ugc/577901446709652492/0E3F2454B9E1AE67A8CCC22F284B1183F02DF155/",
 		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
 	},
-	dm_montana = {
-		name = "Montana", workshop = "563904685",
-		img = "http://images.akamai.steamusercontent.com/ugc/392173784278456259/464BBA8D0D4F766BE829F60D291458D993FADE54/",
-		modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
-	},
+	-- dm_montana = {
+	-- 	name = "Montana", workshop = "563904685",
+	-- 	img = "http://images.akamai.steamusercontent.com/ugc/392173784278456259/464BBA8D0D4F766BE829F60D291458D993FADE54/",
+	-- 	modes = { "ffa_dm", "ffa_el", "squad_dm", "squad_el", "team_dm", "team_el", "gg" },
+	-- },
 	dm_torque = {
 		name = "Torque", workshop = "442990905",
 		img = "http://images.akamai.steamusercontent.com/ugc/544152440190283835/F6E77E18AD0A573938CD33380B427DE2C3811C2D/",
