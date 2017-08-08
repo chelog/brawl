@@ -58,6 +58,8 @@ SetGlobalInt( "brawl.Rounds", GetGlobalInt( "brawl.Rounds", 0 ) )
 
 function brawl.RoundThink()
 
+	if not brawl.modes.active then return end
+
 	if not brawl.modes.active.Think then
 		brawl.msg( "ERROR: Mode has no Think logic!" )
 		return
@@ -69,6 +71,8 @@ end
 hook.Add( "Think", "brawl.RoundThink", brawl.RoundThink )
 
 function brawl.EndRound( data )
+
+	if not brawl.modes.active then return end
 
 	if not brawl.modes.active.EndRound then
 		brawl.msg( "ERROR: Mode has no EndRound logic!" )
@@ -118,6 +122,8 @@ end
 
 function brawl.PlayerLoadWeapons( ply )
 
+	if not brawl.modes.active then return end
+
 	if not brawl.modes.active.PlayerLoadWeapons then
 		ply:StripWeapons()
 
@@ -149,6 +155,8 @@ end
 
 function brawl.PlayerCanSpectate( ply, ent )
 
+	if not brawl.modes.active then return end
+
 	if not brawl.modes.active.PlayerCanSpectate then
 		return true
 	end
@@ -158,6 +166,8 @@ function brawl.PlayerCanSpectate( ply, ent )
 end
 
 function brawl.PlayerCanTalkTo( listener, talker, team, text )
+
+	if not brawl.modes.active then return end
 
 	if not brawl.modes.active.PlayerCanTalkTo then
 		return true
@@ -169,6 +179,8 @@ end
 
 function brawl.DeathThink( ply )
 
+	if not brawl.modes.active then return end
+
 	if not brawl.modes.active.DeathThink then
 		return true
 	end
@@ -178,6 +190,8 @@ function brawl.DeathThink( ply )
 end
 
 function brawl.PlayerInitialSpawn( ply )
+
+	if not brawl.modes.active then return end
 
 	if not brawl.modes.active.PlayerInitialSpawn then
 		ply:Spawn()
@@ -190,6 +204,8 @@ end
 
 function brawl.PlayerDeath( ply )
 
+	if not brawl.modes.active then return end
+
 	if brawl.modes.active.PlayerDeath then
 		brawl.modes.active.PlayerDeath( ply )
 	end
@@ -197,6 +213,8 @@ function brawl.PlayerDeath( ply )
 end
 
 function brawl.DoPlayerDeath( victim, attacker, dmg )
+
+	if not brawl.modes.active then return end
 
 	if brawl.modes.active.DoPlayerDeath then
 		brawl.modes.active.DoPlayerDeath( victim, attacker, dmg )
@@ -206,6 +224,8 @@ end
 
 function brawl.SwitchTeam( ply, tID, force )
 
+	if not brawl.modes.active then return end
+	
 	local allowedTeams = {}
 	local minNumber = math.huge
 	for _, k in pairs( brawl.modes.active.teams ) do
