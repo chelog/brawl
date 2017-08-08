@@ -1,9 +1,7 @@
-local mode = {
-	name = "Team Deathmatch",
-	teams = { 1, 2 },
-}
+MODE.name = "Squad Deathmatch"
+MODE.teams = { 1, 2, 3, 4 }
 
-function mode.hud()
+function MODE:hud()
 
 	local myTeam = LocalPlayer():Team()
 	for k, ply in pairs( team.GetPlayers(myTeam) ) do
@@ -25,5 +23,3 @@ function mode.hud()
 	end
 
 end
-
-brawl.modes.register( "team_dm", mode )

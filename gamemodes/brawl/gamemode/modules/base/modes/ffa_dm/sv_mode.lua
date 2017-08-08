@@ -1,16 +1,14 @@
-local mode = {
-	name = "FFA Deathmatch",
-	maxRounds = 1,
-	maxKills = 20,
-	agenda = "Have 20 kills to win",
-}
+MODE.name = "FFA Deathmatch"
+MODE.maxRounds = 1
+MODE.maxKills = 20
+MODE.agenda = "Have 20 kills to win"
 
-function mode.Think()
+function MODE:Think()
 
 	if GetGlobalInt( "brawl.RoundState" ) < 3 then
 		for k, ply in pairs( player.GetAll() ) do
 			if not IsValid( ply ) then continue end
-			if ply:Frags() >= mode.maxKills then
+			if ply:Frags() >= self.maxKills then
 				brawl.EndRound({
 					winner = ply
 				})
@@ -21,7 +19,7 @@ function mode.Think()
 end
 
 local intermissionTime = 10
-function mode.EndRound( data )
+function MODE:EndRound( data )
 
 	if data.winner then
 		local ply = data.winner
@@ -41,7 +39,7 @@ function mode.EndRound( data )
 
 end
 
-function mode.NewRound( type )
+function MODE:NewRound( type )
 
 	local delay = 6.1
 
@@ -60,8 +58,8 @@ function mode.NewRound( type )
 
 			net.Start( "brawl.round.start" )
 				net.WriteFloat( delay )
-				net.WriteString( mode.name )
-				net.WriteString( mode.agenda )
+				net.WriteString( self.name )
+				net.WriteString( self.agenda )
 			net.Send( ply )
 		end
 	end
@@ -79,7 +77,7 @@ function mode.NewRound( type )
 
 end
 
-function mode.PlayerSpawn( ply )
+function MODE:PlayerSpawn( ply )
 
 	local spawn = brawl.spawn.findFarthest( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
@@ -91,7 +89,7 @@ function mode.PlayerSpawn( ply )
 
 end
 
-function mode.DeathThink( ply )
+function MODE:DeathThink( ply )
 
 	local spawnTime = ply:GetNWFloat( "RespawnTime" )
 
@@ -107,19 +105,19 @@ function mode.DeathThink( ply )
 
 end
 
-function mode.PlayerCanTalkTo( listener, talker, team, text )
+function MODE:PlayerCanTalkTo( listener, talker, team, text )
 
 	return true
 
 end
 
-function mode.PlayerCanSpectate( ply, ent )
+function MODE:PlayerCanSpectate( ply, ent )
 
 	return true
 
 end
 
-function mode.PlayerInitialSpawn( ply )
+function MODE:PlayerInitialSpawn( ply )
 
 	timer.Simple(0, function()
 		local delay = 6.1
@@ -131,17 +129,15 @@ function mode.PlayerInitialSpawn( ply )
 
 		net.Start( "brawl.round.start" )
 			net.WriteFloat( delay )
-			net.WriteString( mode.name )
-			net.WriteString( mode.agenda )
+			net.WriteString( self.name )
+			net.WriteString( self.agenda )
 		net.Send( ply )
 	end)
 
 end
 
-function mode.PlayerDeath( ply )
+function MODE:PlayerDeath( ply )
 
 	ply:SetNWFloat( "RespawnTime", CurTime() + 8 )
 
 end
-
-brawl.modes.register( "ffa_dm", mode )

@@ -52,7 +52,7 @@ function GM:PlayerSpawn( ply )
 
 	if not IsValid(ply) then return end
 
-	brawl.modes.active.PlayerSpawn( ply )
+	brawl.modes.active:PlayerSpawn( ply )
 
 	ply.BabyGod = true
 	timer.Simple( 3, function()

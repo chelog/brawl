@@ -1,58 +1,56 @@
-local mode = {
-	name = "Gun Game",
-	maxRounds = 1,
-	maxStage = 10,
-	agenda = "Advance to knife and kill to win",
-	stages = {
-		[1] = {
-			kills = 3,
-			weapons = { "cw_ak74", "cw_ar15" }
-		},
-		[2] = {
-			kills = 2,
-			weapons = { "khr_ak103", "cw_scarh" }
-		},
-		[3] = {
-			kills = 2,
-			weapons = { "khr_fmg9", "khr_mp5a5" }
-		},
-		[4] = {
-			kills = 2,
-			weapons = { "khr_veresk", "khr_p90" }
-		},
-		[5] = {
-			kills = 2,
-			weapons = { "khr_pkm", "cw_m249_official" }
-		},
-		[6] = {
-			kills = 2,
-			weapons = { "khr_m620", "cw_m3super90" }
-		},
-		[7] = {
-			kills = 2,
-			weapons = { "khr_sr338", "khr_m82a3" }
-		},
-		[8] = {
-			kills = 2,
-			weapons = { "khr_deagle", "cw_deagle" }
-		},
-		[9] = {
-			kills = 2,
-			weapons = { "khr_mp443", "khr_p226" }
-		},
-		[10] = {
-			kills = 1,
-			weapons = { "cw_fc2_machete", "cw_gerber_gator" }
-		},
-	}
+MODE.name = "Gun Game"
+MODE.maxRounds = 1
+MODE.maxStage = 10
+MODE.agenda = "Advance to knife and kill to win"
+MODE.stages = {
+	[1] = {
+		kills = 3,
+		weapons = { "cw_ak74", "cw_ar15" }
+	},
+	[2] = {
+		kills = 2,
+		weapons = { "khr_ak103", "cw_scarh" }
+	},
+	[3] = {
+		kills = 2,
+		weapons = { "khr_fmg9", "khr_mp5a5" }
+	},
+	[4] = {
+		kills = 2,
+		weapons = { "khr_veresk", "khr_p90" }
+	},
+	[5] = {
+		kills = 2,
+		weapons = { "khr_pkm", "cw_m249_official" }
+	},
+	[6] = {
+		kills = 2,
+		weapons = { "khr_m620", "cw_m3super90" }
+	},
+	[7] = {
+		kills = 2,
+		weapons = { "khr_sr338", "khr_m82a3" }
+	},
+	[8] = {
+		kills = 2,
+		weapons = { "khr_deagle", "cw_deagle" }
+	},
+	[9] = {
+		kills = 2,
+		weapons = { "khr_mp443", "khr_p226" }
+	},
+	[10] = {
+		kills = 1,
+		weapons = { "cw_fc2_machete", "cw_gerber_gator" }
+	},
 }
 
-function mode.Think()
+function MODE:Think()
 
 	-- if GetGlobalInt( "brawl.RoundState" ) < 3 then
 	-- 	for k, ply in pairs( player.GetAll() ) do
 	-- 		if not IsValid( ply ) then continue end
-	-- 		if ply:Frags() >= mode.maxKills then
+	-- 		if ply:Frags() >= self.maxKills then
 	-- 			brawl.EndRound({
 	-- 				winner = ply
 	-- 			})
@@ -63,7 +61,7 @@ function mode.Think()
 end
 
 local intermissionTime = 10
-function mode.EndRound( data )
+function MODE:EndRound( data )
 
 	if GetGlobalInt( "brawl.RoundState" ) == 3 then return end
 
@@ -85,7 +83,7 @@ function mode.EndRound( data )
 
 end
 
-function mode.NewRound( type )
+function MODE:NewRound( type )
 
 	local delay = 6.1
 
@@ -104,8 +102,8 @@ function mode.NewRound( type )
 
 			net.Start( "brawl.round.start" )
 				net.WriteFloat( delay )
-				net.WriteString( mode.name )
-				net.WriteString( mode.agenda )
+				net.WriteString( self.name )
+				net.WriteString( self.agenda )
 			net.Send( ply )
 		end
 	end
@@ -123,7 +121,7 @@ function mode.NewRound( type )
 
 end
 
-function mode.PlayerSpawn( ply )
+function MODE:PlayerSpawn( ply )
 
 	local spawn = brawl.spawn.findFarthest( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
@@ -140,7 +138,7 @@ function mode.PlayerSpawn( ply )
 
 end
 
-function mode.DeathThink( ply )
+function MODE:DeathThink( ply )
 
 	local spawnTime = ply:GetNWFloat( "RespawnTime" )
 
@@ -156,19 +154,19 @@ function mode.DeathThink( ply )
 
 end
 
-function mode.PlayerCanTalkTo( listener, talker, team, text )
+function MODE:PlayerCanTalkTo( listener, talker, team, text )
 
 	return true
 
 end
 
-function mode.PlayerCanSpectate( ply, ent )
+function MODE:PlayerCanSpectate( ply, ent )
 
 	return true
 
 end
 
-function mode.PlayerInitialSpawn( ply )
+function MODE:PlayerInitialSpawn( ply )
 
 	timer.Simple(0, function()
 		local delay = 6.1
@@ -178,22 +176,22 @@ function mode.PlayerInitialSpawn( ply )
 
 		net.Start( "brawl.round.start" )
 			net.WriteFloat( delay )
-			net.WriteString( mode.name )
-			net.WriteString( mode.agenda )
+			net.WriteString( self.name )
+			net.WriteString( self.agenda )
 		net.Send( ply )
 	end)
 
 end
 
-function mode.PlayerDeath( ply )
+function MODE:PlayerDeath( ply )
 
 	ply:SetNWFloat( "RespawnTime", CurTime() + 8 )
 
 end
 
-function mode.PlayerLoadWeapons( ply )
+function MODE:PlayerLoadWeapons( ply )
 
-	local stage = mode.stages[ ply.ggStage ]
+	local stage = self.stages[ ply.ggStage ]
 	local wep = table.Random( stage.weapons )
 	ply:GiveWeapon( "cw_fc2_machete" )
 	ply:GiveWeapon( wep, 2 )
@@ -203,52 +201,50 @@ function mode.PlayerLoadWeapons( ply )
 
 end
 
-function mode.DoPlayerDeath( victim, attacker, dmg )
+function MODE:DoPlayerDeath( victim, attacker, dmg )
 
 	if attacker:IsPlayer() then
-		local stage = mode.stages[ attacker.ggStage ]
+		local stage = self.stages[ attacker.ggStage ]
 		if attacker:Frags() >= stage.kills then
-			if attacker.ggStage >= mode.maxStage then
+			if attacker.ggStage >= self.maxStage then
 				return brawl.EndRound({
 					winner = attacker
 				})
 			end
 
 			timer.Simple( 1, function()
-				mode.AddStage( attacker, 1 )
+				self.AddStage( attacker, 1 )
 				attacker:StripWeapons()
 				attacker:SetFrags(0)
 
-				mode.PlayerLoadWeapons( attacker )
+				self.PlayerLoadWeapons( attacker )
 			end)
 		end
 
 		local wep = IsValid(dmg:GetInflictor()) and dmg:GetInflictor():IsWeapon() and dmg:GetInflictor() or attacker:GetActiveWeapon()
 		if wep and wep:GetClass() == "cw_fc2_machete" or victim == attacker then
-			mode.AddStage( victim, -1 )
+			self.AddStage( victim, -1 )
 			victim:SetFrags(0)
 		end
 	end
 
 end
 
-function mode.AddStage( ply, delta )
+function MODE:AddStage( ply, delta )
 
 	ply.ggStage = math.max( ply.ggStage + delta, 1 )
 	ply:SetScore( ply.ggStage )
 
 end
 
-function mode.PlayerCanPickupWeaponClass( ply, class )
+function MODE:PlayerCanPickupWeaponClass( ply, class )
 
 	return false
 
 end
 
-function mode.PlayerCanDropWeapon( ply, wep )
+function MODE:PlayerCanDropWeapon( ply, wep )
 
 	return false
 
 end
-
-brawl.modes.register( "gg", mode )

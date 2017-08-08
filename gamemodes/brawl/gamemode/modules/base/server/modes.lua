@@ -3,21 +3,6 @@ CreateConVar( "brawl_nextmode", "", { FCVAR_REPLICATED, FCVAR_GAMEDLL, FCVAR_ARC
 local oldMode =  GetGlobalString( "brawl.mode" )
 local pendingMode = GetConVar( "brawl_nextmode" ):GetString()
 
-brawl.modes = {
-	registered = {}
-}
-
-function brawl.modes.register( name, t )
-
-	if not brawl.modes.registered[ name ] then
-		brawl.modes.registered[ name ] = t
-		brawl.msg( "Registered mode: %s", name )
-	else
-		brawl.msg( "[ERROR] Mode %s is already registered!", name )
-	end
-
-end
-
 function brawl.modes.select( name )
 
 	if not brawl.modes.registered[ name ] then
@@ -49,10 +34,6 @@ function brawl.modes.select( name )
 
 end
 
-local path = brawl.getModulePath( "base", true )
-includeFolder( path .. "/server/modes" )
-AddCSLuaFolder( path .. "/client/modes" )
-
 SetGlobalInt( "brawl.RoundState", GetGlobalInt( "brawl.RoundState", 0 ) )
 SetGlobalInt( "brawl.Rounds", GetGlobalInt( "brawl.Rounds", 0 ) )
 
@@ -65,7 +46,7 @@ function brawl.RoundThink()
 		return
 	end
 
-	brawl.modes.active.Think()
+	brawl.modes.active:Think()
 
 end
 hook.Add( "Think", "brawl.RoundThink", brawl.RoundThink )
@@ -79,7 +60,7 @@ function brawl.EndRound( data )
 		return
 	end
 
-	brawl.modes.active.EndRound( data )
+	brawl.modes.active:EndRound( data )
 
 	net.Start( "brawl.round.end" )
 		net.WriteTable( data )
@@ -115,7 +96,7 @@ function brawl.NewRound()
 		return
 	end
 
-	brawl.modes.active.NewRound()
+	brawl.modes.active:NewRound()
 	SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
 
 end
@@ -149,7 +130,7 @@ function brawl.PlayerLoadWeapons( ply )
 		return true
 	end
 
-	return brawl.modes.active.PlayerLoadWeapons( ply )
+	return brawl.modes.active:PlayerLoadWeapons( ply )
 
 end
 
@@ -161,7 +142,7 @@ function brawl.PlayerCanSpectate( ply, ent )
 		return true
 	end
 
-	brawl.modes.active.PlayerCanSpectate( ply, ent )
+	brawl.modes.active:PlayerCanSpectate( ply, ent )
 
 end
 
@@ -173,7 +154,7 @@ function brawl.PlayerCanTalkTo( listener, talker, team, text )
 		return true
 	end
 
-	return brawl.modes.active.PlayerCanTalkTo( listener, talker, team, text )
+	return brawl.modes.active:PlayerCanTalkTo( listener, talker, team, text )
 
 end
 
@@ -185,7 +166,7 @@ function brawl.DeathThink( ply )
 		return true
 	end
 
-	brawl.modes.active.DeathThink( ply )
+	brawl.modes.active:DeathThink( ply )
 
 end
 
@@ -197,7 +178,7 @@ function brawl.PlayerInitialSpawn( ply )
 		ply:Spawn()
 	end
 
-	brawl.modes.active.PlayerInitialSpawn( ply )
+	brawl.modes.active:PlayerInitialSpawn( ply )
 	SetGlobalString( "brawl.mode.agenda", brawl.modes.active.agenda )
 
 end
@@ -207,7 +188,7 @@ function brawl.PlayerDeath( ply )
 	if not brawl.modes.active then return end
 
 	if brawl.modes.active.PlayerDeath then
-		brawl.modes.active.PlayerDeath( ply )
+		brawl.modes.active:PlayerDeath( ply )
 	end
 
 end
@@ -217,7 +198,7 @@ function brawl.DoPlayerDeath( victim, attacker, dmg )
 	if not brawl.modes.active then return end
 
 	if brawl.modes.active.DoPlayerDeath then
-		brawl.modes.active.DoPlayerDeath( victim, attacker, dmg )
+		brawl.modes.active:DoPlayerDeath( victim, attacker, dmg )
 	end
 
 end
@@ -225,7 +206,7 @@ end
 function brawl.SwitchTeam( ply, tID, force )
 
 	if not brawl.modes.active then return end
-	
+
 	local allowedTeams = {}
 	local minNumber = math.huge
 	for _, k in pairs( brawl.modes.active.teams ) do

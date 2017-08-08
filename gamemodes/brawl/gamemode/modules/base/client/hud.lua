@@ -78,7 +78,7 @@ function brawl.hud.draw()
 
 	local mode = GetGlobalString( "brawl.mode" )
 	if brawl.modes.registered[ mode ] and brawl.modes.registered[ mode ].hud then
-		brawl.modes.registered[ mode ].hud()
+		brawl.modes.registered[ mode ]:hud()
 	end
 
 	brawl.hud.drawDevPreview()

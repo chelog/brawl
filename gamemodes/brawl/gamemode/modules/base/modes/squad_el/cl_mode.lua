@@ -1,9 +1,7 @@
-local mode = {
-	name = "Squad Elimination",
-	teams = { 1, 2, 3, 4 },
-}
+MODE.name = "Squad Elimination"
+MODE.teams = { 1, 2, 3, 4 }
 
-function mode.hud()
+function MODE:hud()
 
 	local myTeam = LocalPlayer():Team()
 	for k, ply in pairs( team.GetPlayers(myTeam) ) do
@@ -26,5 +24,3 @@ function mode.hud()
 	end
 
 end
-
-brawl.modes.register( "squad_el", mode )

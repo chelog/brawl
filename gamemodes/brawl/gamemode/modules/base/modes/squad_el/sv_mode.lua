@@ -1,56 +1,54 @@
-local mode = {
-	name = "FFA Elimination",
-	maxRounds = 10,
-	agenda = "Be the last one alive to win",
-}
+MODE.name = "Squad Elimination"
+MODE.maxRounds = 10
+MODE.agenda = "Last alive squad wins"
+MODE.teams = { 1, 2, 3, 4 }
 
-function mode.Think()
+function MODE:Think()
 
-	local plys = player.GetAll()
-	if table.Count( plys ) < 2 then
-		SetGlobalInt( "brawl.RoundState", 0 )
-		return
-	elseif GetGlobalInt( "brawl.RoundState" ) == 0 then
+	if GetGlobalInt( "brawl.RoundState" ) == 0 then
+		SetGlobalInt( "brawl.Rounds", 0 )
 		brawl.NewRound()
 	end
 
-	local alive, spectating = {}, {}
-	for k, ply in pairs( plys ) do
-		if not IsValid( ply ) then continue end
-		if ply:Alive() then
-			table.insert( alive, ply )
-		elseif ply:GetNWBool( "SpectateOnly" ) then
-			table.insert( spectating, ply )
+	if table.Count(player.GetAll()) > 1 and GetGlobalInt( "brawl.RoundState" ) < 3 then
+		local existingTeams, aliveTeams = {}, {}
+		for _, k in pairs( self.teams ) do
+			aliveTeams[ k ] = table.Count( team.GetAlivePlayers( k ) ) > 0 and true or nil
+			for _, ply in pairs( team.GetPlayers( k ) ) do
+				if not ply:GetNWBool( "SpectateOnly" ) then
+					existingTeams[ k ] = true
+					break
+				end
+			end
 		end
-	end
-
-	if table.Count( alive ) <= 1
-	and GetGlobalInt( "brawl.RoundState" ) < 3 then
-		brawl.EndRound({
-			winner = alive[1]
-		})
+		if table.Count( aliveTeams ) <= 1 and table.Count( existingTeams ) > 1 then
+			local legit = table.Count( aliveTeams ) == 1 and GetGlobalInt( "brawl.KillsThisRound" ) > 0
+			self.EndRound({ winner = legit and table.GetFirstKey(aliveTeams) or nil })
+		end
 	end
 
 end
 
 local intermissionTime = 10
-function mode.EndRound( data )
+function MODE:EndRound( data )
 
 	if data.winner then
-		local ply = data.winner
-		if not IsValid( ply ) then return end
+		local t = data.winner
+		if not t then return end
 
 		timer.Simple( intermissionTime, brawl.NewRound )
 		SetGlobalFloat( "RoundStart", CurTime() + intermissionTime )
 
+		team.AddScore( data.winner, 1 )
 		SetGlobalInt( "brawl.RoundState", 3 )
 		brawl.NotifyAll({
-			Color(255,212,50), ply:Name(),
+			team.GetColor( data.winner ), team.GetName( data.winner ) .. " squad",
 			color_white, " won the round!"
 		})
-		ply:AddScore( 1 )
 
-		ply:AddXP( 250, "Round winner" )
+		for k, ply in pairs( team.GetPlayers(t) ) do
+			ply:AddXP( 200, "Round winner" )
+		end
 	else
 		timer.Simple( intermissionTime, brawl.NewRound )
 		SetGlobalFloat( "RoundStart", CurTime() + intermissionTime )
@@ -61,7 +59,7 @@ function mode.EndRound( data )
 
 end
 
-function mode.NewRound( type )
+function MODE:NewRound( type )
 
 	local delay = 6.1
 
@@ -78,8 +76,8 @@ function mode.NewRound( type )
 
 			net.Start( "brawl.round.start" )
 				net.WriteFloat( delay )
-				net.WriteString( mode.name )
-				net.WriteString( mode.agenda )
+				net.WriteString( self.name )
+				net.WriteString( self.agenda )
 			net.Send( ply )
 		end
 	end
@@ -97,9 +95,9 @@ function mode.NewRound( type )
 
 end
 
-function mode.PlayerSpawn( ply )
+function MODE:PlayerSpawn( ply )
 
-	local spawn = brawl.spawn.findFarthest( ply )
+	local spawn = brawl.spawn.findNearestTeam( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
 	if spawn.ang then ply:SetEyeAngles( spawn.ang ) end
 
@@ -109,7 +107,7 @@ function mode.PlayerSpawn( ply )
 
 end
 
-function mode.DeathThink( ply )
+function MODE:DeathThink( ply )
 
 	local spawnTime = ply:GetNWFloat( "RespawnTime" )
 	local spectateTime = ply:GetNWFloat( "SpectateTime" )
@@ -124,32 +122,42 @@ function mode.DeathThink( ply )
 
 end
 
-function mode.PlayerCanTalkTo( listener, talker, team, text )
+function MODE:PlayerCanTalkTo( listener, talker, t, text )
+
+	if not talker:Alive() then return false end
+	return true, listener:Team() ~= talker:Team()
+
+end
+
+function MODE:PlayerCanSpectate( ply, ent )
 
 	return true
 
 end
 
-function mode.PlayerCanSpectate( ply, ent )
-
-	return true
-
-end
-
-function mode.PlayerInitialSpawn( ply )
+function MODE:PlayerInitialSpawn( ply )
 
 	if table.Count( player.GetAll() ) > 1 and GetGlobalInt( "brawl.RoundState" ) ~= 0 then
 		timer.Simple(0, function()
 			ply:KillSilent()
-			ply:SetScore( 0 )
-			ply:SetTeam( 1001 )
+			ply:SetScore( -1 )
 			ply:StartSpectating()
 		end)
 	end
 
+	timer.Simple(0,function()
+		local t = team.BestAutoJoinTeam( ply )
+		ply:SetTeam( t )
+		brawl.NotifyAll({
+			team.GetColor(t), ply:Name(),
+			color_white, " joined ",
+			team.GetColor(t), team.GetName(t) .. " squad"
+		})
+	end)
+
 end
 
-function mode.PlayerDeath( ply )
+function MODE:PlayerDeath( ply )
 
 	local plys = player.GetAll()
 	if table.Count( plys ) < 2 then
@@ -159,5 +167,3 @@ function mode.PlayerDeath( ply )
 	end
 
 end
-
-brawl.modes.register( "ffa_el", mode )
