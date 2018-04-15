@@ -70,10 +70,12 @@ In main menu (opened by ESC) on **Game** tab you can change teams or toggle spec
 
 ### Adding maps
 
-1. Add map to server's workshop collection
-2. Add map to `config.lua` using the exapmle at the bottom of map list
-3. Run server on new map and use `brawl_spawn_add` and `brawl_spawn_remove ID` to edit spawns on the map
-4. Reload map and see how it works
+1. Enable debug mode at the very bottom of `config.lua`
+2. Add map to server's workshop collection
+3. Add map to `config.lua` using the exapmle at the bottom of map list
+4. Run server on new map and use `brawl_points_add spawn` and `brawl_points_remove spawn ID` to edit spawns on the map
+5. Reload map and see how it works
+6. When finished editing maps, disable debug mode
 
 *I recommend setting from 20 to 35 spawnpoints for new maps. All maps included in test collection have predefined spawnpoints.*
 
