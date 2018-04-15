@@ -2,8 +2,8 @@ brawl.data = {}
 
 function brawl.data.init()
 
-	brawl.spawn.initData()
-	brawl.spawn.load()
+	brawl.points.initData()
+	brawl.points.load()
 
 end
 -- hook.Add( "DatabaseInitialized", "brawl.data", brawl.data.init )

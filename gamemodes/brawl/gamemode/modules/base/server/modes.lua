@@ -206,6 +206,10 @@ end
 function brawl.SwitchTeam( ply, tID, force )
 
 	if not brawl.modes.active then return end
+	if ply.nextSwitchTeam and ply.nextSwitchTeam > CurTime() then
+		ply:Notify( "Hold on for a sec", "error" )
+		return
+	end
 
 	local allowedTeams = {}
 	local minNumber = math.huge
@@ -251,6 +255,8 @@ function brawl.SwitchTeam( ply, tID, force )
 		color_white, " joined team ",
 		team.GetColor(tID), team.GetName( tID )
 	})
+
+	ply.nextSwitchTeam = CurTime() + 5
 
 end
 

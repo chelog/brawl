@@ -1,7 +1,4 @@
-MODE.name = "Team Elimination"
-MODE.teams = { 1, 2 }
-
-function MODEЖhud()
+function MODE:hud()
 
 	local myTeam = LocalPlayer():Team()
 	for k, ply in pairs( team.GetPlayers(myTeam) ) do

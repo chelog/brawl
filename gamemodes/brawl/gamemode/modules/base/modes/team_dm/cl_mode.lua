@@ -1,6 +1,3 @@
-MODE.name = "Team Deathmatch"
-MODE.teams = { 1, 2 }
-
 function MODE:hud()
 
 	local myTeam = LocalPlayer():Team()

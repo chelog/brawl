@@ -14,7 +14,7 @@ function brawl.bodyView.removeModifier( name )
 
 end
 
-local lastRoll = 0
+local lastRoll, lastFOV = 0, 1
 hook.Add( "CalcView", "brawl", function( ply, pos, angles, fov )
 
 	local view = {
@@ -59,8 +59,14 @@ hook.Add( "CalcView", "brawl", function( ply, pos, angles, fov )
 	if ply:Alive() then
 		local ang = ply:GetVelocity():Dot( ply:GetRight() ) / 100
 		local roll = math.Clamp( math.Approach( lastRoll, ang, FrameTime() * 10 ), -90, 90 )
+
+		local speed = LocalPlayer():GetVelocity():LengthSqr()
+		local curFOV = math.Approach( lastFOV, 1 + math.Clamp( speed - 55000, 0, 40000 ) / 20000 * 0.1, FrameTime() / 2 )
+		lastFOV = curFOV
+
 		brawl.bodyView.setModifier( "move", {
-			angles = Angle( 0, 0, roll )
+			angles = Angle( 0, 0, roll ),
+			fov = curFOV,
 		})
 		lastRoll = roll
 	else

@@ -12,7 +12,7 @@ brawl.config.server = {
 
 	name = "Just another Brawl server (v" .. brawl.version .. ")",
 	password = "",
-	loadingURL = "http://www.octothorp.team/changelog/?s=brawl",
+	loadingURL = "",
 
 	-- these commands will be executed by server during map loading
 	runCommands = {
@@ -359,4 +359,4 @@ brawl.config.weapons = {
 }
 
 -- debug mode (for developers)
-brawl.config.debug = true
+brawl.config.debug = false

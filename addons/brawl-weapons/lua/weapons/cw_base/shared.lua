@@ -638,9 +638,9 @@ function SWEP:Holster(wep)
 		return false
 	end
 
-	if self.ReloadDelay then
-		return false
-	end
+	-- if self.ReloadDelay then
+	-- 	return false
+	-- end
 
 	if self.dt.State ~= CW_HOLSTER_START then
 		self.dt.HolsterDelay = CurTime() + self.HolsterTime
@@ -803,7 +803,7 @@ function SWEP:beginReload()
 		self.ReloadDelay = CT + reloadTime
 		self:SetNextPrimaryFire(CT + reloadHalt)
 		self:SetNextSecondaryFire(CT + reloadHalt)
-		self.GlobalDelay = CT + reloadHalt
+		-- self.GlobalDelay = CT + reloadHalt
 
 		if self.reloadAnimFunc then
 			self:reloadAnimFunc(mag)

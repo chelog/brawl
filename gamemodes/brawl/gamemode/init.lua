@@ -1,7 +1,4 @@
-brawl = brawl or
-{
-	version = 0.1
-}
+brawl = brawl or {}
 
 -- include libraries
 include "lib/mysqlite.lua"

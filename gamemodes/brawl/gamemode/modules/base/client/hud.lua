@@ -261,7 +261,7 @@ local hitMarkAlpha = 0
 local hitMarkSize = 30
 function brawl.hud.drawHitMarker()
 
-	hitMarkAlpha = math.Approach( hitMarkAlpha, 0, 0.03 )
+	hitMarkAlpha = math.Approach( hitMarkAlpha, 0, FrameTime() * 2 )
 
 	if hitMarkAlpha > 0 then
 		local center = { x = ScrW() / 2, y = ScrH() / 2 }

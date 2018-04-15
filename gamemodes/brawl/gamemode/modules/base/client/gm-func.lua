@@ -56,3 +56,17 @@ net.Receive( "brawl.myModel", function( len )
 	brawl.mySkin = net.ReadUInt(8)
 
 end)
+
+hook.Add( "InitPostEntity", "brawl.precacheModels", function()
+
+	for _, l in pairs(brawl.config.playerModels) do
+		for _, mdls in ipairs(l) do
+			if istable(mdls) then
+				for _, mdl in ipairs(mdls) do util.PrecacheModel(mdl) end
+			else
+				util.PrecacheModel(mdls)
+			end
+		end
+	end
+
+end)

@@ -35,7 +35,7 @@ local meta = FindMetaTable "Player"
 
 function meta:Notify( data, t )
 
-	brawl.Notify( self, text, t )
+	brawl.Notify( self, data, t )
 
 end
 

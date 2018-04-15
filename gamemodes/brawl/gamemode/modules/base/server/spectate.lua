@@ -49,10 +49,16 @@ function meta:StartSpectating( ent )
 
 	self:SetNWBool( "Spectating", true )
 	self.spectatee = ent
-
+	
 end
 
 concommand.Add( "brawl_spectate", function(ply, cmd, args, argStr)
+
+	if ply.nextSwitchSpec and ply.nextSwitchSpec > CurTime() then
+		ply:Notify( "Hold on for a sec", "error" )
+		return
+	end
+	ply.nextSwitchSpec = CurTime() + 5
 
 	state = args[1] and (args[1] == "1" and true or false) or not ply:GetNWBool( "SpectateOnly" )
 	if state then

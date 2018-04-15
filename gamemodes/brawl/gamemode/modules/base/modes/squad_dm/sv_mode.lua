@@ -1,9 +1,3 @@
-MODE.name = "Squad Deathmatch"
-MODE.maxRounds = 1
-MODE.maxKills = 30
-MODE.agenda = "Squad with 30 kills wins"
-MODE.teams = { 1, 2, 3, 4 }
-
 function MODE:Think()
 
 	if GetGlobalInt( "brawl.RoundState" ) == 0 then
@@ -86,7 +80,7 @@ end
 
 function MODE:PlayerSpawn( ply )
 
-	local spawn = brawl.spawn.findNearestTeam( ply )
+	local spawn = brawl.points.findNearestTeamSpawn( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
 	if spawn.ang then ply:SetEyeAngles( spawn.ang ) end
 

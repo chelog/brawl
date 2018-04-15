@@ -1,8 +1,3 @@
-MODE.name = "Squad Elimination"
-MODE.maxRounds = 10
-MODE.agenda = "Last alive squad wins"
-MODE.teams = { 1, 2, 3, 4 }
-
 function MODE:Think()
 
 	if GetGlobalInt( "brawl.RoundState" ) == 0 then
@@ -23,7 +18,7 @@ function MODE:Think()
 		end
 		if table.Count( aliveTeams ) <= 1 and table.Count( existingTeams ) > 1 then
 			local legit = table.Count( aliveTeams ) == 1 and GetGlobalInt( "brawl.KillsThisRound" ) > 0
-			self.EndRound({ winner = legit and table.GetFirstKey(aliveTeams) or nil })
+			brawl.EndRound({ winner = legit and table.GetFirstKey(aliveTeams) or nil })
 		end
 	end
 
@@ -97,7 +92,7 @@ end
 
 function MODE:PlayerSpawn( ply )
 
-	local spawn = brawl.spawn.findNearestTeam( ply )
+	local spawn = brawl.points.findNearestTeamSpawn( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
 	if spawn.ang then ply:SetEyeAngles( spawn.ang ) end
 

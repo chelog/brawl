@@ -1,8 +1,3 @@
-MODE.name = "FFA Deathmatch"
-MODE.maxRounds = 1
-MODE.maxKills = 20
-MODE.agenda = "Have 20 kills to win"
-
 function MODE:Think()
 
 	if GetGlobalInt( "brawl.RoundState" ) < 3 then
@@ -79,7 +74,7 @@ end
 
 function MODE:PlayerSpawn( ply )
 
-	local spawn = brawl.spawn.findFarthest( ply )
+	local spawn = brawl.points.findFarthestSpawn( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
 	if spawn.ang then ply:SetEyeAngles( spawn.ang ) end
 

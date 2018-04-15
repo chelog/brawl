@@ -1,7 +1,3 @@
-MODE.name = "FFA Elimination"
-MODE.maxRounds = 10
-MODE.agenda = "Be the last one alive to win"
-
 function MODE:Think()
 
 	local plys = player.GetAll()
@@ -97,7 +93,7 @@ end
 
 function MODE:PlayerSpawn( ply )
 
-	local spawn = brawl.spawn.findFarthest( ply )
+	local spawn = brawl.points.findFarthestSpawn( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
 	if spawn.ang then ply:SetEyeAngles( spawn.ang ) end
 

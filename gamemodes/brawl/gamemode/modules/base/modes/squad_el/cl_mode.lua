@@ -1,6 +1,3 @@
-MODE.name = "Squad Elimination"
-MODE.teams = { 1, 2, 3, 4 }
-
 function MODE:hud()
 
 	local myTeam = LocalPlayer():Team()

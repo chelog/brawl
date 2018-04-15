@@ -1,7 +1,3 @@
-MODE.name = "Gun Game"
-MODE.maxRounds = 1
-MODE.maxStage = 10
-MODE.agenda = "Advance to knife and kill to win"
 MODE.stages = {
 	[1] = {
 		kills = 3,
@@ -123,7 +119,7 @@ end
 
 function MODE:PlayerSpawn( ply )
 
-	local spawn = brawl.spawn.findFarthest( ply )
+	local spawn = brawl.points.findFarthestSpawn( ply )
 	if spawn.pos then ply:SetPos( spawn.pos + Vector(0,0,5) ) end
 	if spawn.ang then ply:SetEyeAngles( spawn.ang ) end
 
@@ -213,17 +209,17 @@ function MODE:DoPlayerDeath( victim, attacker, dmg )
 			end
 
 			timer.Simple( 1, function()
-				self.AddStage( attacker, 1 )
+				self:AddStage( attacker, 1 )
 				attacker:StripWeapons()
 				attacker:SetFrags(0)
 
-				self.PlayerLoadWeapons( attacker )
+				self:PlayerLoadWeapons( attacker )
 			end)
 		end
 
 		local wep = IsValid(dmg:GetInflictor()) and dmg:GetInflictor():IsWeapon() and dmg:GetInflictor() or attacker:GetActiveWeapon()
 		if wep and wep:GetClass() == "cw_fc2_machete" or victim == attacker then
-			self.AddStage( victim, -1 )
+			self:AddStage( victim, -1 )
 			victim:SetFrags(0)
 		end
 	end

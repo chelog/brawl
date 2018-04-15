@@ -1,8 +1,12 @@
+MODE.name = "Bomb Defuse"
+MODE.teams = { 1, 2 }
+
 function MODE:hud()
 
 	local myTeam = LocalPlayer():Team()
 	for k, ply in pairs( team.GetPlayers(myTeam) ) do
 		if not ply:Alive() or ply == LocalPlayer() then continue end
+
 
 		local pos = ply:GetPos() + Vector( 0, 0, 40 )
 		local scrPos = pos:ToScreen()
