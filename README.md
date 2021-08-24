@@ -82,7 +82,7 @@ In main menu (opened by ESC) on **Game** tab you can change teams or toggle spec
 ### Credits
 This gamemode wouldn't exist without these people:
 
-- **spy, tigg, tayley, Matsilagi, wystan, FA:S 2.0 team** - prividing CW2.0 weapon base  
+- **spy, tigg, tayley, Matsilagi, wystan, FA:S 2.0 team** - providing CW2.0 weapon base  
 - **direded, roni_sl** - helping me with small code things
 - **Octothorp Team followers** - for extensive testing the gamemode  
 
